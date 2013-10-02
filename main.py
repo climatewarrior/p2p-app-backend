@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 from flask import Flask
-from flask.ext.pymongo import PyMongo
 
 app = Flask(__name__)
 
@@ -17,9 +16,11 @@ def get_recent_questions():
 def register():
     pass
 
+@app.route("/login", methods=["POST"])
 def login():
     pass
 
+@app.route("/logout")
 def logout():
     pass
 
@@ -27,6 +28,7 @@ def logout():
 def get_question(question_id):
     pass
 
+@app.route('/new_answer', methods=["POST"])
 def add_answser(question_id):
     pass
 
@@ -35,4 +37,4 @@ def add_question():
     pass
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
