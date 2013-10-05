@@ -1,0 +1,5 @@
+* p2p-app-backend
+** Dependencies
+   - Flask
+   - Flask-PyMongo
+   - Flask-HTTPAuth
