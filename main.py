@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 # connect to MongoDB with the defaults
 mongo = PyMongo(app)
+
 bcrypt = Bcrypt(app)
 auth = HTTPBasicAuth()
 
@@ -57,9 +58,11 @@ def register():
 
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
-@app.route('/questions/<question_id>')
+@app.route('/questions/<ObjectId:question_id>')
 def get_question(question_id):
-    pass
+    question = mongo.db.questions.find_one(question_id)
+
+    return dumps( { 'question': question }), 201
 
 @app.route('/new_answer', methods=["POST"])
 @auth.login_required
@@ -74,15 +77,13 @@ def add_question():
     question = {
         'question': request.json['q'],
         'answers' : request.json.get('a', {})
-
     }
 
-    id = str(mongo.db.questions.insert(question))
+    id = mongo.db.questions.insert(question)
     question['uri'] = url_for('get_question', question_id = id, _external = True)
+    mongo.db.questions.save(question)
 
     return dumps( { 'question': question }), 201
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
