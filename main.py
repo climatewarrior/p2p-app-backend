@@ -56,14 +56,6 @@ def register():
 
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
-@app.route("/login", methods=["POST"])
-def login():
-    pass
-
-@app.route("/logout")
-def logout():
-    pass
-
 @app.route('/questions/<question_id>')
 def get_question(question_id):
     pass
