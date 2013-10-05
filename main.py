@@ -65,10 +65,30 @@ def get_question(question_id):
 def add_answser(question_id):
     pass
 
+questions = [ 
+    {
+        'id': 1,
+        'q': u'How do you write a question in this app?',
+        'ans' : [u"I don't know, man!", u"Dude, I think you just ask."]
+    }
+]
+
 @app.route('/add_question', methods=['POST'])
 @auth.login_required
 def add_question():
-    pass
+    if not request.json or not 'q' in request.json or not 'ans' in \
+request.json:
+        abort(400)
+        
+    question = {
+        'id': questions[-1]['id'] + 1,
+        'q': request.json['q'],
+        'ans': request.json['ans']
+    }
+    
+    questions.append(question)
+    return jsonify( { 'question': question } ), 201
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
