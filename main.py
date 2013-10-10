@@ -11,6 +11,7 @@ salt = "thisCode1337Safe"
 
 # connect to MongoDB with the defaults
 mongo = PyMongo(app)
+bcrypt = Bcrypt(app)
 auth = HTTPBasicAuth()
 
 @app.route("/")
@@ -61,7 +62,7 @@ def register():
 def get_question(question_id):
     pass
 
-@app.route('/new_answer')
+@app.route('/new_answer', methods=["POST"])
 @auth.login_required
 def add_answser():
     return "ok"
