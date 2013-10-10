@@ -3,13 +3,14 @@
 from flask import Flask, make_response, jsonify, request, abort
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
-from flaskext.bcrypt import Bcrypt
+from md5 import md5
 
 app = Flask(__name__)
 
+salt = "thisCode1337Safe"
+
 # connect to MongoDB with the defaults
 mongo = PyMongo(app)
-bcrypt = Bcrypt(app)
 auth = HTTPBasicAuth()
 
 @app.route("/")
@@ -18,13 +19,13 @@ def hello():
 
 @auth.get_password
 def get_password(username):
-    if username == 'miguel':
-        return 'python'
-    return None
+    user = mongo.db.users.find_one({"username":username})
+    return user['password']
+
 
 @auth.hash_password
 def hash_pw(password):
-    return bcrypt.generate_password_hash(password)
+    return md5(password + salt).hexdigest()
 
 @auth.error_handler
 def unauthorized():
@@ -47,7 +48,7 @@ def register():
     if not all(d in request.json for d in data_fields):
         abort(400)
 
-    pw_hash = bcrypt.generate_password_hash(request.json['password'])
+    pw_hash = md5(request.json['password'] + salt).hexdigest()
     user = {'username': request.json['username'],
                 'email': request.json['email'],
                 'password': pw_hash}
@@ -60,10 +61,10 @@ def register():
 def get_question(question_id):
     pass
 
-@app.route('/new_answer', methods=["POST"])
+@app.route('/new_answer')
 @auth.login_required
-def add_answser(question_id):
-    pass
+def add_answser():
+    return "ok"
 
 questions = [ 
     {
