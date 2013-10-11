@@ -57,9 +57,11 @@ def register():
 
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
-@app.route('/questions/<question_id>')
+@app.route('/questions/<ObjectId:question_id>') 
 def get_question(question_id):
-    pass
+    question = mongo.db.questions.find_one(question_id) 
+    
+    return dumps( { 'question': question }), 201
 
 @app.route('/new_answer', methods=["POST"])
 @auth.login_required
