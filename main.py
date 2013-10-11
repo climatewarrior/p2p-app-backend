@@ -11,7 +11,6 @@ salt = "thisCode1337Safe"
 
 # connect to MongoDB with the defaults
 mongo = PyMongo(app)
-bcrypt = Bcrypt(app)
 auth = HTTPBasicAuth()
 
 @app.route("/")
