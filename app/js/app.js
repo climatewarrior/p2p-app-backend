@@ -11,7 +11,7 @@ var p2pApp = angular.module('p2pApp', [
 ]);
 
 p2pApp.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/questions', {templateUrl: 'partials/question-list.html', controller: 'PhoneListCtrl'});
+  $routeProvider.when('/questions', {templateUrl: 'partials/question-list.html', controller: 'QuestionListCtrl'});
   $routeProvider.when('/view2', {templateUrl: 'partials/partial2.html', controller: 'MyCtrl2'});
   $routeProvider.when('/view3', {templateUrl: 'partials/partial3.html', controller: 'Accordion'});
   $routeProvider.otherwise({redirectTo: '/questions'});
