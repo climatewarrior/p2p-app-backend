@@ -3,6 +3,12 @@
 /* Controllers */
 var appControllers = angular.module('p2pControllers', ['ui.bootstrap']);
 
+appControllers.controller('PhoneListCtrl', ['$scope', 'Question',
+    function($scope, Question) {
+        $scope.questions = Question.query();
+        $scope.orderProp = 'age';
+}]);
+
 appControllers.controller('MyCtrl1', [function() {
 
 }]);
