@@ -9,6 +9,16 @@ appControllers.controller('QuestionListCtrl', ['$scope', 'Question',
         $scope.orderProp = 'age';
 }]);
 
+appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Question',
+    function($scope, $routeParams, Question) {
+        $scope.question = Question.get({questionId: $routeParams.questionId}, function(question) {
+        $scope.mainImageUrl = question.images[0];
+    });
+    $scope.setImage = function(imageUrl) {
+        $scope.mainImageUrl = imageUrl;
+    };
+}]);
+
 appControllers.controller('MyCtrl1', [function() {
 
 }]);

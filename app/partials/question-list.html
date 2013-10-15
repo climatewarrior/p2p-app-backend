@@ -18,7 +18,7 @@
         <li ng-repeat="question in questions | filter:query | orderBy:orderProp" class="thumbnail">
           <a href="#/questions/{{question.id}}" class="thumb"><img ng-src="{{question.imageUrl}}"></a>
           <a href="#/questions/{{question.id}}">{{question.name}}</a>
-          <p>{{phone.snippet}}</p>
+          <p>{{question.snippet}}</p>
         </li>
       </ul>
 
