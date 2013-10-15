@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-var appControllers = angular.module('appControllers', ['ui.bootstrap']);
+var appControllers = angular.module('p2pControllers', ['ui.bootstrap']);
 
 appControllers.controller('MyCtrl1', [function() {
 
