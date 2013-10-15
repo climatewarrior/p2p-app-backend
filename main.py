@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
-from flask import Flask, make_response, jsonify, request, abort
+from flask import Flask, make_response, jsonify, request, abort, url_for
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
 from md5 import md5
+from bson.json_util import dumps
 
 app = Flask(__name__)
 
@@ -35,9 +36,10 @@ def unauthorized():
 def not_found(error):
     return make_response(jsonify( { 'error': 'Not found' } ), 404)
 
-@app.route("/recent")
+@app.route("/recent", methods=['GET'])
 def get_recent_questions():
-    pass
+    questions = mongo.db.questions.find()
+    return dumps({'question':questions}), 201
 
 @app.route('/register', methods=["POST"])
 def register():
@@ -68,29 +70,22 @@ def get_question(question_id):
 def add_answser():
     return "ok"
 
-questions = [ 
-    {
-        'id': 1,
-        'q': u'How do you write a question in this app?',
-        'ans' : [u"I don't know, man!", u"Dude, I think you just ask."]
-    }
-]
-
 @app.route('/add_question', methods=['POST'])
 @auth.login_required
 def add_question():
-    if not request.json or not 'q' in request.json or not 'ans' in \
-request.json:
+    if not request.json or not 'q' in request.json:
         abort(400)
-        
+
     question = {
-        'id': questions[-1]['id'] + 1,
-        'q': request.json['q'],
-        'ans': request.json['ans']
+        'question': request.json['q'],
+        'answers' : request.json.get('a', {})
+
     }
-    
-    questions.append(question)
-    return jsonify( { 'question': question } ), 201
+
+    id = str(mongo.db.questions.insert(question))
+    question['uri'] = url_for('get_question', question_id = id, _external = True)
+
+    return dumps( { 'question': question }), 201
     
 
 if __name__ == "__main__":
