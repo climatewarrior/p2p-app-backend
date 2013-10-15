@@ -65,9 +65,13 @@ def get_question(question_id):
     
     return dumps( { 'question': question }), 201
 
-@app.route('/new_answer', methods=["POST"])
+@app.route('/new_answer/<ObjectId:question_id>', methods=["POST"])
 @auth.login_required
-def add_answser():
+def add_answser(question_id):
+    #This function needs testing !!
+    question = mongo.db.questions.find_one(question_id)
+    question['answers'].append(request.json['answer'])
+    mongo.db.questions.update(question)
     return "ok"
 
 @app.route('/add_question', methods=['POST'])
