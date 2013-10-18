@@ -1,8 +1,24 @@
 <div ng-controller="QuestionDetailCtrl">
-  <accordion close-others="oneAtATime">
-    <accordion-group heading="{{question.name}}" ng-repeat="question in questions">
-      {{question.snippet}}
-        <a href="#/questions/{{question.id}}">See detail...</a>
-    </accordion-group>
-  </accordion>
+        <div class="row-fluid" ng-repeat="question in questions">
+            <div class="span2 muted text-center">
+                <bold>{{question.votes}}</bold>
+                <p>votes</p>
+                <bold>{{question.answers}}</bold>
+                <p>awnsers</p>
+            </div>
+            <div class="span10">
+                <a href="#/questions/{{question.id}}"><strong>{{question.snippet}}</strong></a>
+                <p>
+                    <span ng-repeat="badge in question.badges">
+                        <span class="badge">{{badge}}</span>
+                    </span>
+                </p>
+                <p class="muted">
+                    {{question.age}} minutes ago
+                    <a href="#">{{question.submitter}}</a>
+                </p>
+                <hr></hr>
+            </div>
+
+        </div>
 </div>

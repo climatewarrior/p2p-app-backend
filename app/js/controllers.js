@@ -29,10 +29,19 @@ $location.path(hash);
 
 }]);
 
-appControllers.controller('MyCtrl1', [function() {
+appControllers.controller('TabsCtrl', ['$scope', function($scope) {
+
+        $scope.tabs = [
+            { title:"Questions", content:"", active: true},
+            { title:"Users", content:""},
+            { title:"Unanswered", content:""},
+            { title:"Ask", content:"" }
+        ];
+
+        $scope.navType = 'pills';
 
 }]);
 
-appControllers.controller('MyCtrl2', [function() {
+appControllers.controller('RegisterCtrl', [function() {
 
 }]);

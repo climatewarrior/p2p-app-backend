@@ -8,13 +8,16 @@
   <link rel="stylesheet" href="css/bootstrap.min.css"/>
 </head>
 <body>
-  <ul class="menu">
-      <!-- <li><a href="#/view3">view3</a></li> -->
-  </ul>
+
+    <div ng-controller="TabsCtrl">
+        <tabset>
+            <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
+                {{tab.content}}
+            </tab>
+        </tabset>
+    </div>
 
   <div ng-view></div>
-
-  <div>Angular seed app: v<span app-version></span></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
