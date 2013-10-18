@@ -26,3 +26,7 @@ appControllers.controller('MyCtrl1', [function() {
 appControllers.controller('MyCtrl2', [function() {
 
 }]);
+
+appControllers.controller('RegisterCtrl', [function() {
+
+}]);
