@@ -18,6 +18,7 @@
     </div>
 
   <div ng-view></div>
+  <div ng-include src="tabs[tabs.activeTab].page"></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
