@@ -1,10 +1,9 @@
 [
     {
         "age": 0,
-        "id": "motorola-xoom-with-wi-fi",
-        "imageUrl": "img/phones/motorola-xoom-with-wi-fi.0.jpg",
-        "question": "iTune Store",
-        "snippet": "How do I connect to iTune Store?",
+        "id": "how-do-i-connect-to-itunes-store",
+        "question": "iTunes Store",
+        "snippet": "How do I connect to iTunes Store?",
         "badges": ["computer", "software", "apple"],
         "submitter": "Joe",
         "votes": 1,
@@ -13,7 +12,6 @@
     {
         "age": 1,
         "id": "motorola-xoom",
-        "imageUrl": "img/phones/motorola-xoom.0.jpg",
         "question": "Largest state",
         "snippet": "Which state is the largest in the US?",
         "badges": ["geography", "US"],
@@ -24,7 +22,6 @@
     {
         "age": 2,
         "id": "motorola-atrix-4g",
-        "imageUrl": "img/phones/motorola-atrix-4g.0.jpg",
         "question": "American football",
         "snippet": "How long is the halftime in a football game",
         "badges": ["sports", "football"],
@@ -35,7 +32,6 @@
     {
         "age": 3,
         "id": "dell-streak-7",
-        "imageUrl": "img/phones/dell-streak-7.0.jpg",
         "question": "iPhone 5",
         "snippet": "How much does a contract-free iPhone 5 cost?",
         "badges": ["mobile", "price", "apple"],
@@ -46,7 +42,6 @@
     {
         "age": 4,
         "id": "samsung-gem",
-        "imageUrl": "img/phones/samsung-gem.0.jpg",
         "question": "Football players",
         "snippet": "How many players are allowed on the field at once?",
         "badges": ["sports", "football"],
@@ -57,7 +52,6 @@
     {
         "age": 5,
         "id": "dell-venue",
-        "imageUrl": "img/phones/dell-venue.0.jpg",
         "question": "MP3 player",
         "snippet": "How do I transfer music from a computer to a MP3 player?",
         "badges": ["MP3", "music", "windows"],
@@ -68,7 +62,6 @@
     {
         "age": 6,
         "id": "nexus-s",
-        "imageUrl": "img/phones/nexus-s.0.jpg",
         "question": "Android development",
         "snippet": "Which IDE should I use in order to develop an Android application?",
         "badges": ["Android"],
@@ -79,7 +72,6 @@
     {
         "age": 7,
         "id": "lg-axis",
-        "imageUrl": "img/phones/lg-axis.0.jpg",
         "question": "Mexican food",
         "snippet": "Which Mexican restraurant is the most highly rated in Atlanta?",
         "badges": ["food", "Mexican"],
@@ -90,7 +82,6 @@
     {
         "age": 8,
         "id": "samsung-galaxy-tab",
-        "imageUrl": "img/phones/samsung-galaxy-tab.0.jpg",
         "question": "Tennis star",
         "snippet": "Who is the world No.1 in ATP?",
         "badges": ["sports", "tennis"],
@@ -101,7 +92,6 @@
     {
         "age": 9,
         "id": "samsung-showcase-a-galaxy-s-phone",
-        "imageUrl": "img/phones/samsung-showcase-a-galaxy-s-phone.0.jpg",
         "question": "Car insurance",
         "snippet": "How much does a new driver have to pay approximately for the car insurance each month?",
         "badges": ["car", "insurance", "deals"],

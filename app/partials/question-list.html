@@ -7,11 +7,12 @@
                 <p>answers</p>
             </div>
             <div class="span10">
-                <a href="#/questions/{{question.id}}"><strong>{{question.question}}</strong></a>
-                <p>{{question.snippet}}</p>
-                <span ng-repeat="badge in question.badges">
-                    <span class="badge">{{badge}}</span>
-                </span>
+                <a href="#/questions/{{question.id}}"><strong>{{question.snippet}}</strong></a>
+                <p>
+                    <span ng-repeat="badge in question.badges">
+                        <span class="badge">{{badge}}</span>
+                    </span>
+                </p>
                 <p class="muted">
                     {{question.age}} minutes ago
                     <a href="#">{{question.submitter}}</a>
