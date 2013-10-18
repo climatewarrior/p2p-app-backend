@@ -19,6 +19,16 @@ appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Ques
     };
 }]);
 
+appControllers.controller('LoginCtrl', [function() {
+}]);
+
+appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location){ 
+$scope.goNext = function (hash) { 
+$location.path(hash);
+ };
+
+}]);
+
 appControllers.controller('MyCtrl1', [function() {
 
 }]);
