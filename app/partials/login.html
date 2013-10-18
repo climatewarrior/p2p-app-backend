@@ -1,34 +1,21 @@
 <div ng-controller="ButtonsCtrl" class="row-fluid">
   <form class="span10 offset2">
-       <h1>P2P Q&A</h1>
-       <img src="img/p2p_logo.jpg" align="middle" class="img-polaroid" width="120" height="120"/></img>
-       <br>
-       <div class="control-group">
-           <label class="control-label" for="inputUsername">Username</label>
-           <div class="controls">
-               <input type="text" id="inputUsername" placeholder="Username">
-           </div>
-       </div>
-       <div class="control-group">
-           <label class="control-label" for="inputPassword">Password</label>
-           <div class="controls">
-               <input type="password" id="inputPassword" placeholder="Password">
-           </div>
-       </div>
-       <div class="control-group">
-           <div class="controls">
-               <label class="checkbox">
-                   <input type="checkbox"> Remember me
-               </label>
-               <button type="submit" ng-click='goNext("/questions")' class="btn btn-success">Login</button>
-           </div>
-       </div>
-       <div class="control-group">
-           <div class="controls">
-               <a href="#">(Forgot Your Password)</a>
-               <br>
-               <button type="create" ng-click='goNext("/register")' class="btn btn-info">Create Account</button>
-           </div>
-       </div>
+      <img src="img/p2p_logo.jpg" class="img-polaroid" width="120" height="120"/></img>
+      <h1>P2P Q&A</h1>
+
+      <label class="control-label" for="inputUsername">Username</label>
+      <input type="text" id="inputUsername" placeholder="Username">
+
+      <label class="control-label" for="inputPassword">Password</label>
+      <input type="password" id="inputPassword" placeholder="Password">
+
+      <label class="checkbox">
+          <input type="checkbox"> Remember me
+      </label>
+
+      <button type="submit" ng-click='goNext("/questions")' class="btn btn-success">Login</button>
+      <button type="create" ng-click='goNext("/register")' class="btn btn-info">Create Account</button>
+      <br>
+      <a href="#">(Forgot Your Password)</a>
   </form>
 </div>

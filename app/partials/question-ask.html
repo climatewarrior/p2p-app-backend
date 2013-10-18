@@ -1,12 +1,12 @@
 <div ng-controller="QuestionAskCtrl" class="row-fluid">
     <div class="span11 offset1">
-        <div>Title</div>
+        <label>Title</label>
         <input type="text" "ng-model="question.title" required/>
         <br>
-        <div>What Is Your Question?</div>
+        <label>What Is Your Question?</label>
         <textarea rows=10 ng-model="question.content"></textarea>
         <br>
-        <div>Tags</div>
+        <label>Tags</label>
         <input type="text" "ng-model="question.tag" required />
         <br>
         <button type="submit" class="btn btn-primary" ng-model="singleModel" ng-click='goNext("/questions")'>Submit</button>
