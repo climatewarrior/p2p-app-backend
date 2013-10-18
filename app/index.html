@@ -9,16 +9,20 @@
 </head>
 <body>
 
-    <div ng-controller="TabsCtrl">
-        <tabset>
-            <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disabled="tab.disabled">
-                {{tab.content}}
-            </tab>
-        </tabset>
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: currentRoute=='questions'}">
+                <a href="#/questions">Questions</a>
+            </li>
+            <li ng-class="{active: currentRoute==''}">
+                <a href="#">Users</a>
+            </li>
+            <li ng-class="{active: currentRoute=='ask'}">
+                <a href="#/ask">Ask</a>
+            </li>
+        </ul>
+        <div class="tab-content" ng-view></div>
     </div>
-
-  <div ng-view></div>
-  <div ng-include src="tabs[tabs.activeTab].page"></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
