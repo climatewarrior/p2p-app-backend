@@ -19,11 +19,16 @@ appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Ques
     };
 }]);
 
-appControllers.controller('MyCtrl1', [function() {
+appControllers.controller('TabsCtrl', ['$scope', function($scope) {
 
-}]);
+        $scope.tabs = [
+            { title:"Questions", content:"", active: true},
+            { title:"Users", content:""},
+            { title:"Unanswered", content:""},
+            { title:"Ask", content:"" }
+        ];
 
-appControllers.controller('MyCtrl2', [function() {
+        $scope.navType = 'pills';
 
 }]);
 
