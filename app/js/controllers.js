@@ -42,6 +42,23 @@ appControllers.controller('TabsCtrl', ['$scope', function($scope) {
 
 }]);
 
-appControllers.controller('RegisterCtrl', [function() {
+appControllers.controller('QuestionAskCtrl', ['$scope', '$location',function($scope, $location){
+$scope.goNext = function (hash) { 
+$location.path(hash);
+};
+
+}]);
+
+appControllers.controller('RegisterCtrl', ['$scope', '$location',function($scope, $location){
+$scope.goNext = function (hash) { 
+$location.path(hash);
+};
+
+}]);
+
+appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location){ 
+$scope.goNext = function (hash) { 
+$location.path(hash);
+};
 
 }]);
