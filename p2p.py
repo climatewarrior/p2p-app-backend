@@ -3,8 +3,10 @@
 from flask import Flask, make_response, jsonify, request, abort, url_for
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
+from flask.ext.testing import TestCase
 from md5 import md5
 from bson.json_util import dumps
+import code
 
 app = Flask(__name__)
 
@@ -59,10 +61,10 @@ def register():
 
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
-@app.route('/questions/<ObjectId:question_id>') 
+@app.route('/questions/<ObjectId:question_id>')
 def get_question(question_id):
-    question = mongo.db.questions.find_one(question_id) 
-    
+    question = mongo.db.questions.find_one(question_id)
+
     return dumps( { 'question': question }), 201
 
 @app.route('/new_answer/<ObjectId:question_id>', methods=["POST"])
@@ -77,6 +79,7 @@ def add_answser(question_id):
 @app.route('/add_question', methods=['POST'])
 @auth.login_required
 def add_question():
+    print request
     if not request.json or not 'q' in request.json:
         abort(400)
 
@@ -90,7 +93,6 @@ def add_question():
     question['uri'] = url_for('get_question', question_id = id, _external = True)
 
     return dumps( { 'question': question }), 201
-    
 
 if __name__ == "__main__":
     app.run(debug=True)
