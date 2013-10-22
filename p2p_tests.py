@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import unittest
 import p2p
 import requests
