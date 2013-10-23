@@ -9,13 +9,13 @@
             <div class="span9">
                 <a href="#/questions/{{question.id}}"><strong>{{question.snippet}}</strong></a>
                 <p>
-                    <span ng-repeat="badge in question.badges">
-                        <span class="badge">{{badge}}</span>
+                    <span ng-repeat="tag in question.tags">
+                        <span class="badge">{{tag}}</span>
                     </span>
                 </p>
                 <p class="muted">
-                    {{question.age}} minutes ago
-                    <a href="#">{{question.submitter}}</a>
+                    Posted on: {{question.posted-epoch-time | date:'short'}}
+                    by <a href="#">{{question.submitter}}</a>
                 </p>
                 <hr></hr>
             </div>
