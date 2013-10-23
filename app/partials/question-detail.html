@@ -1,30 +1,23 @@
 <div ng-controller="QuestionDetailCtrl">
     <div class="row-fluid">
-            <div class="span2 muted text-center">
-                <i class="icon-arrow-up"></i>
-                <br>
-                <bold>{{question.votes}}</bold>
-                <br>
-                <i class="icon-arrow-down"></i>
-                <br>
-                <i class="icon-star"></i>
-            </div>
-            <div class="span10">
+            <div class='span2 offset1' ng-include src="'partials/questionf.html'" onload="votes=question.votes"></div>
+            <div class="span9">
                 <strong>{{question.title}}</strong>
                 <p>
                     <span ng-repeat="tag in question.tags">
                         <span class="badge">{{tag}}</span>
                     </span>
                 </p>
+                <p>{{question.detailed}}</p>
             </div>
-
     </div>
-    <div class="row-fluid">
-            <div class="span12">
-                <p>
-                    {{question.text}}
-                </p>
-            </div>
+    <div class="row-fluid" ng-repeat="answer in question.answers">
+        <hr>
+        <div class='span2 offset1' ng-include src="'partials/questionf.html'" onload="votes=answer.votes"></div>
+        <div class='span9'>
+            <p>{{answer.answer}}</p>
+
+        </div>
     </div>
     <div class="row-fluid">
             <div class="span4 text-center">
