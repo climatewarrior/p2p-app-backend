@@ -22,29 +22,10 @@ appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Ques
 appControllers.controller('LoginCtrl', [function() {
 }]);
 
-appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location){
-$scope.goNext = function (hash) {
-$location.path(hash);
+appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location) {
+    $scope.goNext = function (hash) {
+        $location.path(hash);
  };
-
-}]);
-
-appControllers.controller('TabsCtrl', ['$scope', function($scope) {
-
-    $scope.tabs = [
-        { title:"Questions", content:"", active: true},
-        { title:"Users", content:""},
-        { title:"Unanswered", content:""},
-        { title:"Ask", page:"question-ask.html" }
-    ];
-
-    $scope.alertMe = function() {
-        setTimeout(function() {
-            alert("You've selected the alert tab!");
-        });
-    };
-
-    $scope.navType = 'pills';
 
 }]);
 
@@ -56,13 +37,6 @@ $location.path(hash);
 }]);
 
 appControllers.controller('RegisterCtrl', ['$scope', '$location',function($scope, $location){
-$scope.goNext = function (hash) {
-$location.path(hash);
-};
-
-}]);
-
-appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location){
 $scope.goNext = function (hash) {
 $location.path(hash);
 };
