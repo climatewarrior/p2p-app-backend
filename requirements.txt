@@ -1,0 +1,15 @@
+Flask==0.10.1
+Flask-HTTPAuth==2.1.0
+Flask-PyMongo==0.3.0
+Flask-Testing==0.4
+Jinja2==2.7.1
+MarkupSafe==0.18
+Werkzeug==0.9.4
+argparse==1.2.1
+distribute==0.6.24
+gunicorn==18.0
+itsdangerous==0.23
+pymongo==2.6.3
+requests==2.0.0
+twill==0.9
+wsgiref==0.1.2

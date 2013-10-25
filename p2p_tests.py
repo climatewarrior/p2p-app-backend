@@ -6,15 +6,17 @@ import requests
 import base64
 import json
 import code
+import random
 
+unittest.TestLoader.sortTestMethodsUsing = lambda _, x, y: random.choice([1,-1])    
 
 class P2PTests(unittest.TestCase):
-
+        
     def setUp(self):
         p2p.app.config['TESTING'] = True
         self.app = p2p.app.test_client()
         self.url = "http://localhost:5000"
-
+        
     def tearDown(self):
         pass
 
@@ -36,6 +38,6 @@ class P2PTests(unittest.TestCase):
                            headers=headers)
 
         assert 'question' in rv.json()
-
+        
 if __name__ == '__main__':
     unittest.main()
