@@ -4,17 +4,30 @@ from flask import Flask, make_response, jsonify, request, abort, url_for, \
     render_template
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
+from pymongo import Connection
 from flask.ext.testing import TestCase
 from md5 import md5
 from bson.json_util import dumps
-import code
+
+import code, os
 
 app = Flask(__name__, static_url_path='')
 
 salt = "thisCode1337Safe"
+MONGO_URL = os.environ.get('MONGOHQ_URL')
+ 
+if MONGO_URL:
+    # Get a connection
+    conn = pymongo.Connection(MONGO_URL)
+    
+    # Get the database
+    db = conn[urlparse(MONGO_URL).path[1:]]
+else:
+    # connect to MongoDB with the defaults
+    mongo = PyMongo(app)
+    connection = Connection('localhost', 27017)
+    db = connection['p2p']
 
-# connect to MongoDB with the defaults
-mongo = PyMongo(app)
 auth = HTTPBasicAuth()
 
 @app.route("/")
@@ -23,7 +36,7 @@ def index():
 
 @auth.get_password
 def get_password(username):
-    user = mongo.db.users.find_one({"username":username})
+    user = db.users.find_one({"username":username})
     return user['password']
 
 
@@ -41,7 +54,7 @@ def not_found(error):
 
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
-    questions = mongo.db.questions.find().limit(10)
+    questions = db.questions.find().limit(10)
     return dumps({'question':questions}), 201
 
 @app.route('/register', methods=["POST"])
@@ -58,13 +71,13 @@ def register():
                 'email': request.json['email'],
                 'password': pw_hash}
 
-    mongo.db.users.insert(user)
+    db.users.insert(user)
 
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
 @app.route('/questions/<ObjectId:question_id>')
 def get_question(question_id):
-    question = mongo.db.questions.find_one(question_id)
+    question = db.questions.find_one(question_id)
 
     return dumps( { 'question': question }), 201
 
@@ -72,9 +85,9 @@ def get_question(question_id):
 @auth.login_required
 def add_answser(question_id):
     #This function needs testing !!
-    question = mongo.db.questions.find_one(question_id)
+    question = db.questions.find_one(question_id)
     question['answers'].append(request.json['answer'])
-    mongo.db.questions.update(question)
+    db.questions.update(question)
     return "ok"
 
 @app.route('/questions', methods=['POST'])
@@ -87,13 +100,13 @@ def add_question():
     question = {
         'question': request.json['q'],
         'answers' : request.json.get('a', {})
-
     }
 
-    id = str(mongo.db.questions.insert(question))
+    id = str(db.questions.insert(question))
     question['uri'] = url_for('get_question', question_id = id, _external = True)
 
     return dumps( { 'question': question }), 201
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
