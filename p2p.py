@@ -38,7 +38,7 @@ def unauthorized():
 def not_found(error):
     return make_response(jsonify( { 'error': 'Not found' } ), 404)
 
-@app.route("/recent", methods=['GET'])
+@app.route("/questions", methods=['GET'])
 def get_recent_questions():
     questions = mongo.db.questions.find().limit(10)
     return dumps({'question':questions}), 201
@@ -67,7 +67,7 @@ def get_question(question_id):
 
     return dumps( { 'question': question }), 201
 
-@app.route('/new_answer/<ObjectId:question_id>', methods=["POST"])
+@app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def add_answser(question_id):
     #This function needs testing !!
@@ -76,7 +76,7 @@ def add_answser(question_id):
     mongo.db.questions.update(question)
     return "ok"
 
-@app.route('/add_question', methods=['POST'])
+@app.route('/questions', methods=['POST'])
 @auth.login_required
 def add_question():
     print request
