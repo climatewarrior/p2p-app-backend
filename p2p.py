@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-from flask import Flask, make_response, jsonify, request, abort, url_for
+from flask import Flask, make_response, jsonify, request, abort, url_for, \
+    render_template
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
 from flask.ext.testing import TestCase
@@ -8,9 +9,7 @@ from md5 import md5
 from bson.json_util import dumps
 import code
 
-
-
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 
 salt = "thisCode1337Safe"
 
@@ -19,8 +18,8 @@ mongo = PyMongo(app)
 auth = HTTPBasicAuth()
 
 @app.route("/")
-def hello():
-    return "Hello World!"
+def index():
+    return render_template("index.html")
 
 @auth.get_password
 def get_password(username):
