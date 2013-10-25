@@ -1,15 +1,17 @@
-<div ng-controller="QuestionAskCtrl" class="row-fluid">
+<div class="row-fluid">
     <div class="span11 offset1">
-        <label>Title</label>
-        <input type="text" "ng-model="question.title" required/>
-        <br>
-        <label>What Is Your Question?</label>
-        <textarea rows=10 ng-model="question.content"></textarea>
-        <br>
-        <label>Tags</label>
-        <input type="text" "ng-model="question.tag" required />
-        <br>
-        <button type="submit" class="btn btn-primary" ng-model="singleModel" ng-click='goNext("/questions")'>Submit</button>
-        <button type="reset" class="btn btn-primary" ng-model="singleModel">Clear</button>
+        <form ng-controller="QuestionAskCtrl" ng-submit="addQuestion()">
+            <label>Title</label>
+            <input type="text" "ng-model="question.title" required/>
+            <br>
+            <label>What Is Your Question?</label>
+            <textarea rows=10 ng-model="question.content"></textarea>
+            <br>
+            <label>Tags</label>
+            <input type="text" "ng-model="question.tags" required/>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-primary">Clear</button>
+        </form>
     </div>
 </div>

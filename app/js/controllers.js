@@ -29,10 +29,10 @@ appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope,
 
 }]);
 
-appControllers.controller('QuestionAskCtrl', ['$scope', '$location',function($scope, $location){
-$scope.goNext = function (hash) {
-$location.path(hash);
-};
+appControllers.controller('QuestionAskCtrl', ['$scope', 'Question', function($scope, Question){
+    $scope.addQuestion = function () {
+        Question.save({}, $scope.question)
+    };
 
 }]);
 
