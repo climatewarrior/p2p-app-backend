@@ -6,7 +6,6 @@ var appControllers = angular.module('p2pControllers', ['ui.bootstrap']);
 appControllers.controller('QuestionListCtrl', ['$scope', 'Question',
     function($scope, Question) {
         $scope.questions = Question.query();
-        $scope.orderProp = 'age';
 }]);
 
 appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Question',
@@ -17,9 +16,6 @@ appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Ques
     $scope.setImage = function(imageUrl) {
         $scope.mainImageUrl = imageUrl;
     };
-}]);
-
-appControllers.controller('LoginCtrl', [function() {
 }]);
 
 appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location) {
@@ -40,5 +36,13 @@ appControllers.controller('RegisterCtrl', ['$scope', '$location',function($scope
 $scope.goNext = function (hash) {
 $location.path(hash);
 };
+	
+}]);
 
+appControllers.controller('MyAnsCtrl', [function() {
+}]);
+
+appControllers.controller('MyQnsCtrl', ['$scope', 'Profile',
+    function($scope, Profile) {
+        $scope.items = Profile.pull();
 }]);
