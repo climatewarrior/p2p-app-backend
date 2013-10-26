@@ -18,14 +18,14 @@ appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Ques
     };
 }]);
 
-appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location) {
+appControllers.controller('ButtonsCtrl', ['$scope', '$location', function($scope, $location) {
     $scope.goNext = function (hash) {
         $location.path(hash);
  };
 
 }]);
 
-appControllers.controller('QuestionAskCtrl', ['$scope', 'Question', function($scope, Question){
+appControllers.controller('QuestionAskCtrl', ['$scope', 'Question', function($scope, Question) {
     $scope.question = {};
     $scope.alerts = [];
 
@@ -44,17 +44,26 @@ appControllers.controller('QuestionAskCtrl', ['$scope', 'Question', function($sc
 
 }]);
 
-appControllers.controller('RegisterCtrl', ['$scope', '$location',function($scope, $location){
-$scope.goNext = function (hash) {
-$location.path(hash);
-};
-	
+appControllers.controller('RegisterCtrl', ['$scope', '$location', function($scope, $location) {
+
+    $scope.goNext = function (hash) {
+        $location.path(hash);
+    };
+
+}]);
+
+appControllers.controller('LoginCtrl', ['$scope', '$location', function($scope, $location) {
+
+    $scope.goNext = function (hash) {
+        $location.path(hash);
+    };
+
 }]);
 
 appControllers.controller('MyAnsCtrl', [function() {
+
 }]);
 
-appControllers.controller('MyQnsCtrl', ['$scope', 'Profile',
-    function($scope, Profile) {
+appControllers.controller('MyQnsCtrl', ['$scope', 'Profile', function($scope, Profile) {
         $scope.items = Profile.pull();
 }]);

@@ -4,15 +4,14 @@
             <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
             <label>Title</label>
             <input type="text" id="title" ng-model="question.title" required/>
-            <br>
             <label>What Is Your Question?</label>
             <textarea rows=10 id="content" ng-model="question.content"></textarea>
-            <br>
             <label>Tags</label>
             <input type="text" id="tags" ng-model="question.tags" required/>
-            <br>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-primary">Clear</button>
+            <p>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-primary">Clear</button>
+            </p>
         </form>
     </div>
 </div>
