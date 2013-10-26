@@ -8,6 +8,7 @@ from pymongo import Connection
 from flask.ext.testing import TestCase
 from md5 import md5
 from bson.json_util import dumps
+from urlparse import urlparse
 
 import code, os
 
