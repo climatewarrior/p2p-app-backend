@@ -80,13 +80,14 @@ def add_answser(question_id):
 @app.route('/questions', methods=['POST'])
 @auth.login_required
 def add_question():
-    print request
-    if not request.json or not 'q' in request.json:
+    data_fields = ("title", "content", "tags")
+    if not all(d in request.json for d in data_fields):
         abort(400)
 
     question = {
-        'question': request.json['q'],
-        'answers' : request.json.get('a', {})
+        'title': request.json['title'],
+        'content' : request.json['content'],
+        'tags' : request.json['tags'],
 
     }
 
