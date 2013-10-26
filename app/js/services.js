@@ -24,3 +24,11 @@ p2pServices.factory('Profile', ['$resource',
                     isArray:true},
         });
 }]);
+
+p2pServices.factory('ProfileAnswers', ['$resource',
+    function($resource){
+        return $resource('questions/user1-answers.json', {}, {
+            pull: {method:'GET',
+                    isArray:true},
+        });
+}]);

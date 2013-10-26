@@ -39,7 +39,9 @@ $location.path(hash);
 	
 }]);
 
-appControllers.controller('MyAnsCtrl', [function() {
+appControllers.controller('MyAnsCtrl', ['$scope', 'ProfileAnswers',
+    function($scope, ProfileAnswers) {
+        $scope.items = ProfileAnswers.pull();
 }]);
 
 appControllers.controller('MyQnsCtrl', ['$scope', 'Profile',
