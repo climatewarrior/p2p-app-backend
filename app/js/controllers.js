@@ -6,7 +6,6 @@ var appControllers = angular.module('p2pControllers', ['ui.bootstrap']);
 appControllers.controller('QuestionListCtrl', ['$scope', 'Question',
     function($scope, Question) {
         $scope.questions = Question.query();
-        $scope.orderProp = 'age';
 }]);
 
 appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Question',
@@ -30,8 +29,20 @@ appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope,
 }]);
 
 appControllers.controller('QuestionAskCtrl', ['$scope', 'Question', function($scope, Question){
+    $scope.question = {};
+    $scope.alerts = [];
+
+    $scope.addAlert = function() {
+        $scope.alerts.push({type: 'success', msg: "Question submitted!"});
+    };
+
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+    };
+
     $scope.addQuestion = function () {
-        Question.save({}, $scope.question)
+        Question.save({}, $scope.question);
+        $scope.addAlert();
     };
 
 }]);
