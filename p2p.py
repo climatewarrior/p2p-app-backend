@@ -81,12 +81,16 @@ def add_answser(question_id):
 @auth.login_required
 def add_question():
     print request
-    if not request.json or not 'q' in request.json:
+    if not request.json or not 'detailed' or not 'title' or not 'tags'in request.json:
         abort(400)
 
     question = {
-        'question': request.json['q'],
-        'answers' : request.json.get('a', {})
+        'votes': '',
+        'title': request.json['title'],
+        'tags': request.json.get('tags', {}),
+        'detailed': request.json['detailed'],
+        'images': {},
+        'answers' : {}
 
     }
 
