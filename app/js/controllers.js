@@ -18,9 +18,6 @@ appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Ques
     };
 }]);
 
-appControllers.controller('LoginCtrl', [function() {
-}]);
-
 appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location) {
     $scope.goNext = function (hash) {
         $location.path(hash);
@@ -51,5 +48,13 @@ appControllers.controller('RegisterCtrl', ['$scope', '$location',function($scope
 $scope.goNext = function (hash) {
 $location.path(hash);
 };
+	
+}]);
 
+appControllers.controller('MyAnsCtrl', [function() {
+}]);
+
+appControllers.controller('MyQnsCtrl', ['$scope', 'Profile',
+    function($scope, Profile) {
+        $scope.items = Profile.pull();
 }]);
