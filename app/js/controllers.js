@@ -26,8 +26,20 @@ appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope,
 }]);
 
 appControllers.controller('QuestionAskCtrl', ['$scope', 'Question', function($scope, Question){
+    $scope.question = {};
+    $scope.alerts = [];
+
+    $scope.addAlert = function() {
+        $scope.alerts.push({type: 'success', msg: "Question submitted!"});
+    };
+
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+    };
+
     $scope.addQuestion = function () {
-        Question.save({}, $scope.question)
+        Question.save({}, $scope.question);
+        $scope.addAlert();
     };
 
 }]);
