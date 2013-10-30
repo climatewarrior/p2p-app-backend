@@ -20,9 +20,12 @@ MONGO_URL = os.environ.get('MONGOHQ_URL')
 if MONGO_URL:
     
     # connect to another MongoDB server altogether
-    app.config['HEROKU_HOST'] = MONGO_URL
-    #app.config['HEROKU_PORT'] = 10053
-    #app.config['HEROKU_DBNAME'] = 'dbname_three'
+    url = urlparse(MONGO_URL)
+    app.config['HEROKU_HOST'] = url.hostname
+    app.config['HEROKU_PORT'] = url.port
+    app.config['MONGO_USERNAME'] = url.username
+    app.config['MONGO_PASSWORD'] = url.password
+    app.config['HEROKU_DBNAME'] = MONGO_URL.split('/')[-1]
     mongo = PyMongo(app, config_prefix='HEROKU')
     # Get a connection
     #conn = Connection(MONGO_URL)
