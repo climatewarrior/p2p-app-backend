@@ -13,6 +13,7 @@ from urlparse import urlparse
 import code, os
 
 app = Flask(__name__, static_url_path='')
+mongo = PyMongo(app)
 
 salt = "thisCode1337Safe"
 MONGO_URL = os.environ.get('MONGOHQ_URL')
@@ -25,7 +26,6 @@ if MONGO_URL:
     db = conn[urlparse(MONGO_URL).path[1:]]
 else:
     # connect to MongoDB with the defaults
-    mongo = PyMongo(app)
     connection = Connection('localhost', 27017)
     db = connection['p2p']
 
