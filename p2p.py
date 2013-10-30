@@ -4,7 +4,6 @@ from flask import Flask, make_response, jsonify, request, abort, url_for, \
     render_template
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
-from pymongo import Connection
 from flask.ext.testing import TestCase
 from md5 import md5
 from bson.json_util import dumps
@@ -13,21 +12,29 @@ from urlparse import urlparse
 import code, os
 
 app = Flask(__name__, static_url_path='')
-mongo = PyMongo(app)
 
 salt = "thisCode1337Safe"
+
 MONGO_URL = os.environ.get('MONGOHQ_URL')
  
 if MONGO_URL:
+    
+    # connect to another MongoDB server altogether
+    app.config['HEROKU_HOST'] = MONGO_URL
+    #app.config['HEROKU_PORT'] = 10053
+    #app.config['HEROKU_DBNAME'] = 'dbname_three'
+    mongo = PyMongo(app, config_prefix='HEROKU')
     # Get a connection
-    conn = Connection(MONGO_URL)
+    #conn = Connection(MONGO_URL)
     
     # Get the database
-    db = conn[urlparse(MONGO_URL).path[1:]]
+    #db = conn[urlparse(MONGO_URL).path[1:]]
 else:
     # connect to MongoDB with the defaults
-    connection = Connection('localhost', 27017)
-    db = connection['p2p']
+    #connection = Connection('localhost', 27017)
+    #db = connection['p2p']
+    #mongo = PyMongo(app, config_prefix='HEROKU')
+    mongo = PyMongo(app)
 
 auth = HTTPBasicAuth()
 
@@ -37,7 +44,7 @@ def index():
 
 @auth.get_password
 def get_password(username):
-    user = db.users.find_one({"username":username})
+    user = mongo.db.users.find_one({"username":username})
     return user['password']
 
 
@@ -55,7 +62,7 @@ def not_found(error):
 
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
-    questions = db.questions.find().limit(10)
+    questions = mongo.db.questions.find().limit(10)
     return dumps({'question':questions}), 201
 
 @app.route('/register', methods=["POST"])
@@ -72,13 +79,13 @@ def register():
                 'email': request.json['email'],
                 'password': pw_hash}
 
-    db.users.insert(user)
+    mongo.db.users.insert(user)
 
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
 @app.route('/questions/<ObjectId:question_id>')
 def get_question(question_id):
-    question = db.questions.find_one(question_id)
+    question = mongo.db.questions.find_one(question_id)
 
     return dumps( { 'question': question }), 201
 
@@ -86,9 +93,9 @@ def get_question(question_id):
 @auth.login_required
 def add_answser(question_id):
     #This function needs testing !!
-    question = db.questions.find_one(question_id)
+    question = mongo.db.questions.find_one(question_id)
     question['answers'].append(request.json['answer'])
-    db.questions.update(question)
+    mongo.db.questions.update(question)
     return "ok"
 
 @app.route('/questions', methods=['POST'])
@@ -108,7 +115,7 @@ def add_question():
 
     }
 
-    id = str(db.questions.insert(question))
+    id = str(mongo.db.questions.insert(question))
     question['uri'] = url_for('get_question', question_id = id, _external = True)
 
     return dumps( { 'question': question }), 201
