@@ -113,6 +113,7 @@ def add_question():
         'title': request.json['title'],
         'tags': request.json['tags'],
         'detailed': request.json['content'],
+        'submitter': '',
         'images': {},
         'answers' : {}
 
