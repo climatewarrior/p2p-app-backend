@@ -12,14 +12,12 @@ from urlparse import urlparse
 import code, os
 
 app = Flask(__name__, static_url_path='')
-
 salt = "thisCode1337Safe"
-
 MONGO_URL = os.environ.get('MONGOHQ_URL')
  
 if MONGO_URL:
     
-    # connect to another MongoDB server altogether
+    # connect to Heroku MongoHQ server 
     url = urlparse(MONGO_URL)
     app.config['HEROKU_HOST'] = url.hostname
     app.config['HEROKU_PORT'] = url.port
@@ -49,7 +47,6 @@ def index():
 def get_password(username):
     user = mongo.db.users.find_one({"username":username})
     return user['password']
-
 
 @auth.hash_password
 def hash_pw(password):
