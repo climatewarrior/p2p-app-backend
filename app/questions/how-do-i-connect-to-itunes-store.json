@@ -1,4 +1,6 @@
 {
+    "id": "this-is-mongo-id",
+    "posted-epoch-time" : 1382550225,
     "votes": 3,
     "title": "How do I connect to iTunes Store?",
     "tags": ["computer", "software", "apple"],
