@@ -52,10 +52,41 @@ appControllers.controller('RegisterCtrl', ['$scope', '$location', function($scop
 
 }]);
 
-appControllers.controller('LoginCtrl', ['$scope', '$location', function($scope, $location) {
+appControllers.controller('LoginCtrl', ['$scope', '$location', 'Auth', function($scope, $location, Auth) {
+
+    $scope.user = {};
+    $scope.alerts = [];
+
+    $scope.authFailedAlert = function() {
+        $scope.alerts.push({type: 'error', msg: "Wrong username or password."});
+    };
+
+    $scope.authSuccessAlert = function() {
+        $scope.alerts.push({type: 'success', msg: "Logged in."});
+    };
+
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+    };
 
     $scope.goNext = function (hash) {
         $location.path(hash);
+    };
+
+    $scope.login = function () {
+
+        console.log($scope.user.username);
+
+        var success = function(data, status, headers, config) {
+            Auth.setCredentials($scope.user.username, $scope.user.password);
+            $scope.authSuccessAlert();
+        };
+
+        var error = function(data, status, headers, config) {
+            $scope.authFailedAlert();
+        };
+
+        Auth.correctCredentials($scope.user.username, $scope.user.password, success, error);
     };
 
 }]);

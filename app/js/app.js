@@ -5,6 +5,7 @@
 var p2pApp = angular.module('p2pApp', [
   'ngRoute',
   'ngTouch',
+  'ngCookies',
   'p2pFilters',
   'p2pServices',
   'p2pDirectives',
