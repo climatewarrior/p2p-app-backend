@@ -12,14 +12,14 @@ from urlparse import urlparse
 import code, os
 
 app = Flask(__name__, static_url_path='')
+auth = HTTPBasicAuth()
 
 salt = "thisCode1337Safe"
 
 MONGO_URL = os.environ.get('MONGOHQ_URL')
- 
+
 if MONGO_URL:
-    
-    # connect to another MongoDB server altogether
+    # Connect to the Heroku Mongo server
     url = urlparse(MONGO_URL)
     app.config['HEROKU_HOST'] = url.hostname
     app.config['HEROKU_PORT'] = url.port
@@ -27,19 +27,10 @@ if MONGO_URL:
     app.config['MONGO_PASSWORD'] = url.password
     app.config['HEROKU_DBNAME'] = MONGO_URL.split('/')[-1]
     mongo = PyMongo(app, config_prefix='HEROKU')
-    # Get a connection
-    #conn = Connection(MONGO_URL)
-    
-    # Get the database
-    #db = conn[urlparse(MONGO_URL).path[1:]]
-else:
-    # connect to MongoDB with the defaults
-    #connection = Connection('localhost', 27017)
-    #db = connection['p2p']
-    #mongo = PyMongo(app, config_prefix='HEROKU')
-    mongo = PyMongo(app)
 
-auth = HTTPBasicAuth()
+else:
+    # Connect to MongoDB with the defaults
+    mongo = PyMongo(app)
 
 @app.route("/")
 def index():
@@ -50,6 +41,13 @@ def get_password(username):
     user = mongo.db.users.find_one({"username":username})
     return user['password']
 
+@app.route("/test_auth")
+@auth.login_required
+def test_auth():
+    """
+    Call this method just to see if auth token works.
+    """
+    return "ok", 200
 
 @auth.hash_password
 def hash_pw(password):
@@ -87,7 +85,7 @@ def register():
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
 @app.route('/questions/<ObjectId:question_id>')
-def get_question(question_id):
+def get_question(question_id, methods=["GET"]):
     question = mongo.db.questions.find_one(question_id)
 
     return dumps( { 'question': question }), 201
@@ -104,7 +102,8 @@ def add_answser(question_id):
 @app.route('/questions', methods=['POST'])
 @auth.login_required
 def add_question():
-    data_fields = ("title", "content", "tags")
+    print request.json
+    data_fields = ("title", "detailed", "tags")
     if not all(d in request.json for d in data_fields):
         abort(400)
 
@@ -112,7 +111,7 @@ def add_question():
         'votes': '',
         'title': request.json['title'],
         'tags': request.json['tags'],
-        'detailed': request.json['content'],
+        'detailed': request.json['detailed'],
         'submitter': '',
         'images': {},
         'answers' : {}
@@ -120,7 +119,8 @@ def add_question():
     }
 
     id = str(mongo.db.questions.insert(question))
-    question['uri'] = url_for('get_question', question_id = id, _external = True)
+    question['uri'] = url_for('get_question', question_id = id, \
+                              _external = True)
 
     return dumps( { 'question': question }), 201
 
