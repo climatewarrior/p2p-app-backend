@@ -65,7 +65,7 @@ def not_found(error):
 
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
-    questions = mongo.db.questions.find().limit(10)
+    questions = mongo.db.questions.find().sort('$natural',-1).limit(10)
     return dumps({'question':questions}), 201
 
 @app.route('/register', methods=["POST"])
