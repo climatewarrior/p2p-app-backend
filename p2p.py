@@ -95,8 +95,8 @@ def get_profile(user_id):
     user = mongo.db.users.find_one(user_id)
     return dumps({'user':user}), 201
 
-@app.route('/questions/<ObjectId:question_id>')
-def get_question(question_id, methods=["GET"]):
+@app.route('/questions/<ObjectId:question_id>', methods=["GET"])
+def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
 
     return dumps( { 'question': question }), 201
@@ -106,8 +106,10 @@ def get_question(question_id, methods=["GET"]):
 def add_answser(question_id):
     #This function needs testing !!
     question = mongo.db.questions.find_one(question_id)
-    question['answers'].append(request.json['answer'])
-    mongo.db.questions.update(question)
+    print question
+    print request.json['answer']
+    question['answers'] = request.json['answer']
+    mongo.db.questions.update({"_id" : question_id},{"$set": {'answers':request.json['answer']}})
     return "ok"
 
 @app.route('/questions', methods=['POST'])
