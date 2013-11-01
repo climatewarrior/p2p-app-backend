@@ -32,7 +32,7 @@ class P2PTests(unittest.TestCase):
 
     def test_add_question(self):
         headers = {'content-type': 'application/json'}
-        data= { 'title': 'Test Question', 'content': 'This is a sample question', 'tags':''}
+        data= { 'title': 'Test Question', 'detailed': 'This is a sample question', 'tags':''}
         rv = requests.post(self.url + '/questions', data = json.dumps(data), \
                            auth=('testUser', 'testPass'), \
                            headers=headers)

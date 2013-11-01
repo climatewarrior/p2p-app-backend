@@ -84,6 +84,12 @@ def register():
 
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
+# This function returns the profile of a specific user
+@app.route('/user/<ObjectId:user_id>', methods=["GET"])
+def get_profile(user_id):
+    user = mongo.db.users.find_one(user_id)
+    return dumps({'user':user}), 201
+
 @app.route('/questions/<ObjectId:question_id>')
 def get_question(question_id, methods=["GET"]):
     question = mongo.db.questions.find_one(question_id)
