@@ -64,7 +64,12 @@ def not_found(error):
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
     questions = mongo.db.questions.find().sort('$natural',-1).limit(10)
-    return dumps({'question':questions}), 201
+    list = []
+    for q in questions:
+     q['posted-epoch-time']=q['_id'].generation_time
+     #print q
+     list.append(q)
+    return dumps(list), 201
 
 @app.route('/register', methods=["POST"])
 def register():
