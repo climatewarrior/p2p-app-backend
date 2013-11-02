@@ -8,8 +8,9 @@ from flask.ext.testing import TestCase
 from md5 import md5
 from bson.json_util import dumps
 from urlparse import urlparse
+from datetime import date
 
-import code, os
+import code, os, bson
 
 app = Flask(__name__, static_url_path='')
 salt = "thisCode1337Safe"
@@ -62,8 +63,14 @@ def not_found(error):
 
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
-    questions = mongo.db.questions.find().limit(10)
-    return dumps({'question':questions}), 201
+    questions = mongo.db.questions.find().sort('$natural', -1).limit(10)
+    
+    for question in questions:
+        question['answers'].pop()
+        question['images'].pop()
+        question['detailed'].pop()
+    
+    return dumps({'questions':questions}), 201
 
 @app.route('/register', methods=["POST"])
 def register():
@@ -75,9 +82,11 @@ def register():
         abort(400)
 
     pw_hash = md5(request.json['password'] + salt).hexdigest()
-    user = {'username': request.json['username'],
-                'email': request.json['email'],
-                'password': pw_hash}
+    user = {
+        'username'  : request.json['username'],
+        'email'     : request.json['email'],
+        'password'  : pw_hash
+    }
 
     mongo.db.users.insert(user)
 
@@ -86,37 +95,66 @@ def register():
 @app.route('/questions/<ObjectId:question_id>')
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
+    
+    question.pop('number_of_answers')
+    question.pop('submitter')
+    question.pop('uri')
+    question['_id'] = str(question['_id']) 
 
-    return dumps( { 'question': question }), 201
+    return dumps({ 'question': question }), 201
 
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def add_answser(question_id):
-    #This function needs testing !!
+    #WAIT FOR GABRIEL FOR JSON
     question = mongo.db.questions.find_one(question_id)
     question['answers'].append(request.json['answer'])
     mongo.db.questions.update(question)
+    
     return "ok"
 
 @app.route('/questions', methods=['POST'])
 @auth.login_required
 def add_question():
-    data_fields = ("title", "content", "tags")
+    data_fields = ("title", "detailed", "tags")
     if not all(d in request.json for d in data_fields):
         abort(400)
 
+    #Mongo will automatically add and populate '_id' field
     question = {
-        'votes': '',
-        'title': request.json['title'],
-        'tags': request.json['tags'],
-        'detailed': request.json['content'],
-        'images': {},
-        'answers' : {}
-
+        'title'             : request.json['title'],
+        'tags'              : request.json['tags'],
+        'detailed'          : request.json['detailed'],
+        'submitter'         : '',
+        'uri'               : '',
+        'votes'             : 0,
+        'posted-epoch-time' : 0,
+        'images'            : {},
+        'number_of_answers' : 0,
+        'answers'           : {}
     }
 
-    id = str(mongo.db.questions.insert(question))
-    question['uri'] = url_for('get_question', question_id = id, _external = True)
+    id = mongo.db.questions.insert(question)
+    #question['_id'] = str(id)
+    #Do we still need 'uri'?
+    
+    #question['uri'] = url_for('get_question', question_id = str(id), \
+    #                          _external = True)
+    #question['posted-epoch-time'] = id.generation_time
+    
+    uri_val = url_for('get_question', question_id = str(id), \
+                              _external = True)
+    
+    #mongo.db.questions.update({'_id' : id}, {'$set' : question})
+    mongo.db.questions.update({'_id' : id}, 
+                    {
+                     "$set" : {
+                               'uri' : uri_val, 
+                               'posted-epoch-time' : id.generation_time
+                               }
+                     })                
+                    
+    #mongo.db.questions.update(question)
 
     return dumps( { 'question': question }), 201
 
