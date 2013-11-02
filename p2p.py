@@ -13,12 +13,14 @@ from datetime import date
 import code, os, bson
 
 app = Flask(__name__, static_url_path='')
+auth = HTTPBasicAuth()
+
 salt = "thisCode1337Safe"
+
 MONGO_URL = os.environ.get('MONGOHQ_URL')
  
 if MONGO_URL:
-    
-    # connect to Heroku MongoHQ server 
+    # Connect to the Heroku Mongo server
     url = urlparse(MONGO_URL)
     app.config['HEROKU_HOST'] = url.hostname
     app.config['HEROKU_PORT'] = url.port
@@ -26,16 +28,9 @@ if MONGO_URL:
     app.config['MONGO_PASSWORD'] = url.password
     app.config['HEROKU_DBNAME'] = MONGO_URL.split('/')[-1]
     mongo = PyMongo(app, config_prefix='HEROKU')
-    # Get a connection
-    #conn = Connection(MONGO_URL)
-    
-    # Get the database
-    #db = conn[urlparse(MONGO_URL).path[1:]]
+
 else:
-    # connect to MongoDB with the defaults
-    #connection = Connection('localhost', 27017)
-    #db = connection['p2p']
-    #mongo = PyMongo(app, config_prefix='HEROKU')
+    # Connect to MongoDB with the defaults
     mongo = PyMongo(app)
 
 auth = HTTPBasicAuth()
@@ -48,6 +43,14 @@ def index():
 def get_password(username):
     user = mongo.db.users.find_one({"username":username})
     return user['password']
+
+@app.route("/test_auth")
+@auth.login_required
+def test_auth():
+    """
+    Call this method just to see if auth token works.
+    """
+    return "ok", 200
 
 @auth.hash_password
 def hash_pw(password):
@@ -63,14 +66,20 @@ def not_found(error):
 
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
-    questions = mongo.db.questions.find().sort('$natural', -1).limit(10)
-    
-    for question in questions:
-        question['answers'].pop()
-        question['images'].pop()
-        question['detailed'].pop()
-    
-    return dumps({'questions':questions}), 201
+    questions = mongo.db.questions.find().sort('$natural',-1).limit(10)
+    list = []
+    for q in questions:
+     tmp = {}
+     tmp['posted-epoch-time'] = q['_id'].generation_time
+     tmp['id'] = q['detailed']
+     tmp['title'] = q['title']
+     tmp['tags'] = q['tags']
+     tmp['submitter'] = q['submitter']
+     tmp['votes'] = q['votes']
+     tmp['number_of_answers'] = mongo.db.answers.find({"question_id":q['_id']}).count()
+     
+     list.append(tmp)
+    return dumps(list), 201
 
 @app.route('/register', methods=["POST"])
 def register():
@@ -92,69 +101,66 @@ def register():
 
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
-@app.route('/questions/<ObjectId:question_id>')
+# This function returns the profile of a specific user
+@app.route('/user/<ObjectId:user_id>', methods=["GET"])
+def get_profile(user_id):
+    user = mongo.db.users.find_one(user_id)
+    profile = {}
+    profile['username'] = user['username']
+    profile['number_of_questions'] = mongo.db.questions.find({"submitter":user['username']}).count()
+    profile['number_of_answers'] = mongo.db.answers.find({"submitter":user['username']}).count()
+    return dumps(profile), 201
+
+@app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
-    
-    question.pop('number_of_answers')
-    question.pop('submitter')
-    question.pop('uri')
-    question['_id'] = str(question['_id']) 
-
-    return dumps({ 'question': question }), 201
+    question['posted-epoch-time'] = question['_id'].generation_time
+    ans = mongo.db.answers.find({"question_id":question_id})
+    list= []
+    for a in ans:
+        tmp = {}
+        tmp['author'] = a['submitter']
+        tmp['answer'] = a['content']
+        tmp['votes'] = a['votes']
+        tmp['posted-epoch-time'] = a['_id'].generation_time
+        list.append(tmp)
+    question['answers'] = list
+    return dumps(question), 201
 
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def add_answser(question_id):
-    #WAIT FOR GABRIEL FOR JSON
-    question = mongo.db.questions.find_one(question_id)
-    question['answers'].append(request.json['answer'])
-    mongo.db.questions.update(question)
-    
-    return "ok"
+    answer = {
+              'question_id':question_id,
+              'content':request.json['answer'],
+              'submitter':auth.username(),
+              'votes':0     
+              }
+    mongo.db.answers.insert(answer)
+    return "ok", 200
 
 @app.route('/questions', methods=['POST'])
 @auth.login_required
 def add_question():
+    print request.json
     data_fields = ("title", "detailed", "tags")
     if not all(d in request.json for d in data_fields):
         abort(400)
 
-    #Mongo will automatically add and populate '_id' field
     question = {
-        'title'             : request.json['title'],
-        'tags'              : request.json['tags'],
-        'detailed'          : request.json['detailed'],
-        'submitter'         : '',
-        'uri'               : '',
-        'votes'             : 0,
-        'posted-epoch-time' : 0,
-        'images'            : {},
-        'number_of_answers' : 0,
-        'answers'           : {}
+        'votes': '',
+        'title': request.json['title'],
+        'tags': request.json['tags'],
+        'detailed': request.json['detailed'],
+        'submitter': auth.username(),
+        'images': {},
+        'answers' : {}
+
     }
 
-    id = mongo.db.questions.insert(question)
-    #question['_id'] = str(id)
-    #Do we still need 'uri'?
-    
-    #question['uri'] = url_for('get_question', question_id = str(id), \
-    #                          _external = True)
-    #question['posted-epoch-time'] = id.generation_time
-    
-    uri_val = url_for('get_question', question_id = str(id), \
+    id = str(mongo.db.questions.insert(question))
+    question['uri'] = url_for('get_question', question_id = id, \
                               _external = True)
-    
-    #mongo.db.questions.update({'_id' : id}, {'$set' : question})
-    mongo.db.questions.update({'_id' : id}, 
-                    {
-                     "$set" : {
-                               'uri' : uri_val, 
-                               'posted-epoch-time' : id.generation_time
-                               }
-                     })                
-                    
-    #mongo.db.questions.update(question)
 
     return dumps( { 'question': question }), 201
 
