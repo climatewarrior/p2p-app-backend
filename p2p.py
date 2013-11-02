@@ -102,26 +102,30 @@ def get_profile(user_id):
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
-
-    return dumps( { 'question': question }), 201
+    question['posted-epoch-time'] = question['_id'].generation_time
+    ans = mongo.db.answers.find({"question_id":question_id})
+    list= []
+    for a in ans:
+        tmp = {}
+        tmp['author'] = a['submitter']
+        tmp['answer'] = a['content']
+        tmp['votes'] = a['votes']
+        tmp['posted-epoch-time'] = a['_id'].generation_time
+        list.append(tmp)
+    question['answers'] = list
+    return dumps(question), 201
 
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def add_answser(question_id):
-    #This function needs testing !!
-    question = mongo.db.questions.find_one(question_id)
-    print question
-    print request.json['answer']
-    question['answers'] = request.json['answer']
-    #mongo.db.questions.update({"_id" : question_id},{"$set": {'answers':request.json['answer']}})
-    
     answer = {
               'question_id':question_id,
               'content':request.json['answer'],
-              'submitter':auth.username()      
+              'submitter':auth.username(),
+              'votes':0     
               }
     mongo.db.answers.insert(answer)
-    return "ok"
+    return "ok", 200
 
 @app.route('/questions', methods=['POST'])
 @auth.login_required
