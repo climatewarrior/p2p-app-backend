@@ -68,7 +68,7 @@ def get_recent_questions():
     for q in questions:
      tmp = {}
      tmp['posted-epoch-time'] = q['_id'].generation_time
-     tmp['id'] = q['detailed']
+     tmp['id'] = str(q['_id'])
      tmp['title'] = q['title']
      tmp['tags'] = q['tags']
      tmp['submitter'] = q['submitter']
@@ -109,7 +109,9 @@ def get_profile(user_id):
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
+
     question['posted-epoch-time'] = question['_id'].generation_time
+    question['_id'] = str(question['_id'])
     ans = mongo.db.answers.find({"question_id":question_id})
     list= []
     for a in ans:
