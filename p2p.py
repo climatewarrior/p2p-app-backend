@@ -66,8 +66,8 @@ def get_recent_questions():
     questions = mongo.db.questions.find().sort('$natural',-1).limit(10)
     list = []
     for q in questions:
-     q['posted-epoch-time']=q['_id'].generation_time
-     #print q
+     q['posted-epoch-time'] = q['_id'].generation_time
+     q['number_of_answers'] = mongo.db.answers.find({"question_id":q['_id']}).count()
      list.append(q)
     return dumps(list), 201
 
@@ -109,7 +109,14 @@ def add_answser(question_id):
     print question
     print request.json['answer']
     question['answers'] = request.json['answer']
-    mongo.db.questions.update({"_id" : question_id},{"$set": {'answers':request.json['answer']}})
+    #mongo.db.questions.update({"_id" : question_id},{"$set": {'answers':request.json['answer']}})
+    
+    answer = {
+              'question_id':question_id,
+              'content':request.json['answer'],
+              'submitter':auth.username()      
+              }
+    mongo.db.answers.insert(answer)
     return "ok"
 
 @app.route('/questions', methods=['POST'])
