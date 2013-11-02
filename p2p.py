@@ -66,9 +66,16 @@ def get_recent_questions():
     questions = mongo.db.questions.find().sort('$natural',-1).limit(10)
     list = []
     for q in questions:
-     q['posted-epoch-time'] = q['_id'].generation_time
-     q['number_of_answers'] = mongo.db.answers.find({"question_id":q['_id']}).count()
-     list.append(q)
+     tmp = {}
+     tmp['posted-epoch-time'] = q['_id'].generation_time
+     tmp['id'] = q['detailed']
+     tmp['title'] = q['title']
+     tmp['tags'] = q['tags']
+     tmp['submitter'] = q['submitter']
+     tmp['votes'] = q['votes']
+     tmp['number_of_answers'] = mongo.db.answers.find({"question_id":q['_id']}).count()
+     
+     list.append(tmp)
     return dumps(list), 201
 
 @app.route('/register', methods=["POST"])
