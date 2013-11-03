@@ -19,6 +19,7 @@
 
         </div>
     </div>
+    <form novalidate class="css-form" ng-submit="addAns()">
     <div class="row-fluid">
             <div class="span4 text-center">
                 <strong>Your Answer</strong>
@@ -27,5 +28,6 @@
                 <textarea rows="3"></textarea>
             </div>
     </div>
-    <button class="btn btn-primary">Post Your Answer</button>
+    <button class="btn btn-primary" ng-click='goNext("/questions")'>Post Your Answer</button>
+    </form>
 </div>

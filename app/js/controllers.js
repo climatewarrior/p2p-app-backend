@@ -8,24 +8,27 @@ appControllers.controller('QuestionListCtrl', ['$scope', 'Question',
         $scope.questions = Question.query();
 }]);
 
-appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Question',
-    function($scope, $routeParams, Question) {
-        $scope.question = Question.get({questionId: $routeParams.questionId}, function(question) {
-        $scope.mainImageUrl = question.images[0];
-    });
+appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', '$location', 'Temp', 'Question',
+    function($scope, $routeParams, $location, Temp, Question) {
+       $scope.question = Temp.pull();
     $scope.setImage = function(imageUrl) {
         $scope.mainImageUrl = imageUrl;
     };
-}]);
-
-appControllers.controller('ButtonsCtrl', ['$scope', '$location',function($scope, $location) {
     $scope.goNext = function (hash) {
         $location.path(hash);
- };
-
+    };
+    $scope.addAns = function() {
+        Temp.answer();
+    };
 }]);
 
-appControllers.controller('QuestionAskCtrl', ['$scope', 'Question', function($scope, Question){
+appControllers.controller('LoginCtrl', ['$scope', '$location', function($scope, $location) {  
+    $scope.goNext = function (hash) {
+        $location.path(hash);
+    };
+}]);
+
+appControllers.controller('QuestionAskCtrl', ['$scope', '$location', 'Question', function($scope, $location, Question){
     $scope.question = {};
     $scope.alerts = [];
 
@@ -42,12 +45,23 @@ appControllers.controller('QuestionAskCtrl', ['$scope', 'Question', function($sc
         $scope.addAlert();
     };
 
+    $scope.goNext = function (hash) {
+        $location.path(hash);
+    };
+
 }]);
 
-appControllers.controller('RegisterCtrl', ['$scope', '$location',function($scope, $location){
-$scope.goNext = function (hash) {
-$location.path(hash);
-};
+appControllers.controller('RegisterCtrl', ['$scope', '$location', 'User', function($scope, $location, User){
+    $scope.user = {};
+
+
+    $scope.goNext = function (hash) {
+        $location.path(hash);
+    };
+
+    $scope.addUser = function() {
+        User.save({}, $scope.user);
+    };
 	
 }]);
 
