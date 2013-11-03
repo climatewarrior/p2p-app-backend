@@ -1,0 +1,7 @@
+{
+    "votes": 4,
+    "title": "Which IDE should I use in order to develop an Android application?",
+    "tags": ["Android"],
+    "text": "As of Google I/O 2013, the Android team has moved to IntelliJ Idea with the new Android Studio IDE: http://developer.android.com/sdk/installing/studio.html. Great to see Google endorse Idea. It is safe to say that Android Studio, and thus Idea, will from now on be the definitive IDE for Android development! :D"
+
+}

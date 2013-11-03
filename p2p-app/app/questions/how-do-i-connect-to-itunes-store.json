@@ -1,0 +1,17 @@
+{
+    "votes": 3,
+    "title": "How do I connect to iTunes Store?",
+    "tags": ["computer", "software", "apple"],
+    "detailed": "I have inherited a heavily customised - hardly documented CRM 2011 instance. There are over 80 in-house managed solutions and one of them contains a ribbon button that isn't working as desired.",
+    "images": [],
+    "answers" : [
+        {"author":"Bob",
+         "answer": "I don't know",
+         "votes": 3,
+         "posted-epoch-time": 1382550225},
+        {"author":"Bob",
+         "answer": "I don't know",
+         "votes": 3,
+         "posted-epoch-time": 1382550225}
+    ]
+}

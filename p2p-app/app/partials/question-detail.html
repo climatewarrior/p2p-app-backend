@@ -1,0 +1,31 @@
+<div ng-controller="QuestionDetailCtrl">
+    <div class="row-fluid">
+            <div class='span2 offset1' ng-include src="'partials/questionf.html'" onload="votes=question.votes"></div>
+            <div class="span9">
+                <strong>{{question.title}}</strong>
+                <p>
+                    <span ng-repeat="tag in question.tags">
+                        <span class="badge">{{tag}}</span>
+                    </span>
+                </p>
+                <p>{{question.detailed}}</p>
+            </div>
+    </div>
+    <div class="row-fluid" ng-repeat="answer in question.answers">
+        <hr>
+        <div class='span2 offset1' ng-include src="'partials/questionf.html'" onload="votes=answer.votes"></div>
+        <div class='span9'>
+            <p>{{answer.answer}}</p>
+
+        </div>
+    </div>
+    <div class="row-fluid">
+            <div class="span4 text-center">
+                <strong>Your Answer</strong>
+            </div>
+            <div class="span8 text-left">
+                <textarea rows="3"></textarea>
+            </div>
+    </div>
+    <button class="btn btn-primary">Post Your Answer</button>
+</div>
