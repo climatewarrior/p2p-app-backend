@@ -102,13 +102,16 @@ def register():
     return make_response(jsonify( { 'success': 'ok!' } ), 201)
 
 # This function returns the profile of a specific user
+# Points, Image
 @app.route('/user/<ObjectId:user_id>', methods=["GET"])
 def get_profile(user_id):
     user = mongo.db.users.find_one(user_id)
     profile = {}
     profile['username'] = user['username']
-    profile['number_of_questions'] = mongo.db.questions.find({"submitter":user['username']}).count()
-    profile['number_of_answers'] = mongo.db.answers.find({"submitter":user['username']}).count()
+    profile['number_of_questions'] = mongo.db.questions.find(
+                                        {"submitter":user['username']}).count()
+    profile['number_of_answers'] = mongo.db.answers.find(
+                                        {"submitter":user['username']}).count()
     return dumps(profile), 201
 
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
