@@ -191,7 +191,7 @@ def add_question():
         abort(400)
 
     question = {
-        'votes': '',
+        'votes': 0,
         'title': request.json['title'],
         'tags': request.json['tags'],
         'detailed': request.json['detailed'],
