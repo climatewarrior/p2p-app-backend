@@ -31,6 +31,13 @@ appControllers.controller('LoginCtrl', ['$scope', '$location', function($scope, 
 
 }]);
 
+appControllers.controller('ProfileCtrl', ['$scope', '$location', function($scope, $location) {
+    $scope.goNext = function (hash) {
+        $location.path(hash);
+ };
+
+}]);
+
 appControllers.controller('QuestionAskCtrl', ['$scope', '$location', 'Question', function($scope, $location, Question){
     $scope.question = {};
     $scope.alerts = [];
