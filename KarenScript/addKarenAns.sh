@@ -1,7 +1,7 @@
 #!/bin/bash
 
 users=( "Joy"
-        "Liz"
+        "Lisa"
         "Grace"
         "Chris"
         "Brandon"
