@@ -193,7 +193,7 @@ def add_question():
     question = {
         'votes': 0,
         'title': request.json['title'],
-        'tags': request.json['tags'],
+        'tags': request.json['tags'].split(','),
         'detailed': request.json['detailed'],
         'submitter': auth.username(),
         'images': {},
