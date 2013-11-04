@@ -1,3 +1,64 @@
+<script type="text/javascript" charset="utf-8" src="phonegap-1.2.0.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value 
+    document.addEventListener("deviceready",onDeviceReady,false);
+
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+    }
+
+    function capturePhoto() {
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+    }
+// Called when a photo is successfully retrieved
+    //
+    function onPhotoDataSuccess(imageData) {
+      // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
+
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
+
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+    }
+
+    // Called when a photo is successfully retrieved
+    function onPhotoURISuccess(imageURI) {
+      // Get image handle
+
+      var largeImage = document.getElementById('largeImage');
+
+      largeImage.style.display = 'block';
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      largeImage.src = imageURI;
+    }
+
+    function getPhoto(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+        destinationType: destinationType.FILE_URI,
+        sourceType: source });
+    }
+
+    // Called if something bad happens.
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+
+
+</script>
+
+
 <div class="row-fluid">
     <div class="span11 offset1">
         <form ng-controller="QuestionAskCtrl" ng-submit="addQuestion()">
@@ -9,9 +70,11 @@
             <label>Tags</label>
             <input type="text" id="tags" ng-model="question.tags" required/>
             <p>
-                <button type="submit" class="btn btn-primary" ng-click='goNext("/myQns")'>Submit</button>
-                <button type="reset" class="btn btn-primary">Clear</button>
+            <button type="submit" class="btn btn-primary" ng-click='goNext("/myQns")'>Submit</button>
+            <button type="reset" class="btn btn-primary">Clear</button>
+                <button onclick="capturePhoto();" class="btn btn-primary">Add Picture</button>
             </p>
+            <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
         </form>
     </div>
 </div>
