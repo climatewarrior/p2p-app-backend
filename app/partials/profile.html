@@ -1,5 +1,5 @@
 <!-- <div ng-controller="ButtonsCtrl" class="row-fluid"> -->
-<div align="center">
+<div align="center" ng-controller="ProfileCtrl" class="row-fluid">
   <h3>My Profile</h3>
 </div>
 <p>
@@ -10,7 +10,7 @@
         <img src="img/profile_photo.jpg" alt="img/default_photo.jpg" width="70" height="150"  class="img-thumbnail">
       </div>
       <div class="span2">
-        <h4>Peyton Manning</h4>
+        <h4>{{user.username}}</h4>
       </div>
     </div>
   </div>
@@ -20,21 +20,21 @@
   <ul class="nav nav-pills nav-stacked">
   <li class="active">
     <a href="#">
-      <span class="badge pull-right">16778</span>
+      <span class="badge pull-right">{{user.points}}</span>
       Points
     </a>
   </li>
 
    <li class="active">
     <a href="#/myQns">
-      <span class="badge pull-right">42 Questions Answered</span>
+      <span class="badge pull-right">{{user.number_of_questions}} Questions Answered</span>
       My Questions
     </a>
   </li>
 
    <li class="active">
     <a href="#">
-      <span class="badge pull-right">65 Answers Provided</span>
+      <span class="badge pull-right">{{user.number_of_answers}} Answers Provided</span>
       My Answers
     </a>
   </li>

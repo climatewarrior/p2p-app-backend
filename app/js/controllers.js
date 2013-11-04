@@ -34,12 +34,14 @@ appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeP
 
 
 
-appControllers.controller('ProfileCtrl', ['$scope', '$location', function($scope, $location) {
-    $scope.goNext = function (hash) {
-        $location.path(hash);
- };
+appControllers.controller('ProfileCtrl', ['$scope', '$location', 'User', function($scope, $location, User) {
 
-}]);
+        $scope.goNext = function (hash) {
+            $location.path(hash);
+        };
+
+        $scope.user = User.getInfo();
+    }]);
 
 appControllers.controller('QuestionAskCtrl', ['$scope', '$location', 'Question', function($scope, $location, Question){
     $scope.question = {};
