@@ -32,8 +32,6 @@ appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeP
 
     }]);
 
-
-
 appControllers.controller('ProfileCtrl', ['$scope', '$location', 'User', function($scope, $location, User) {
 
         $scope.goNext = function (hash) {
