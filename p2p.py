@@ -142,19 +142,16 @@ def get_answer_for_user():
 def upload():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
-       # rec = Photo(filename=filename, user=auth.username())
-        #rec.store()
-        #flash("Photo saved.")
         print filename
-    #url_for('get_profile', photo_id=rec.id)
-        #print rec.id
-    return "false alarm", 200
- #   image = {
- #            'username':auth.username(),
- #            'img_uri': rec.id
- #            }
- #   mongo.db.images.insert(image)
 
+    image = {
+             'username':auth.username(),
+             'img_uri': 'uploads/photos/'+filename
+             }
+    mongo.db.images.insert(image)
+    
+    print UPLOADS_DEFAULT_DEST
+    return "Successfully uploaded", 201
 
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
