@@ -120,6 +120,7 @@ def get_profile():
                                         {"submitter":user['username']}).count()
     profile['number_of_answers'] = mongo.db.answers.find(
                                         {"submitter":user['username']}).count()
+    profile['points'] = 1000
     return dumps(profile), 201
 
 @app.route('/user/question', methods=["GET"])
