@@ -126,9 +126,21 @@ def get_profile():
 @app.route('/user/question', methods=["GET"])
 @auth.login_required
 def get_questions_for_user():
-    question = {}
-    question = mongo.db.questions.find({"submitter":auth.username()})
-    return dumps(question), 201
+    questions = mongo.db.questions.find({"submitter":auth.username()})
+    list = []
+    for q in questions:
+        tmp = {}
+        tmp['posted-epoch-time'] = q['_id'].generation_time
+        tmp['id'] = str(q['_id'])
+        tmp['title'] = q['title']
+        tmp['tags'] = q['tags']
+        tmp['submitter'] = q['submitter']
+        tmp['votes'] = q['votes']
+        tmp['number_of_answers'] = mongo.db.answers.find({"question_id":q['_id']}).count()
+
+        list.append(tmp)
+
+    return dumps(list), 201
 
 @app.route('/user/answer', methods=["GET"])
 @auth.login_required
