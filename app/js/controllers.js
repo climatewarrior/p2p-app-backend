@@ -72,7 +72,9 @@ appControllers.controller('RegisterCtrl', ['$scope', '$location', 'User', functi
     };
 
     $scope.addUser = function() {
+        console.log($scope.user);
         User.save({}, $scope.user);
+        $location.path("/login");
     };
 
 }]);
@@ -105,6 +107,8 @@ appControllers.controller('LoginCtrl', ['$scope', '$location', 'Auth', function(
         var success = function(data, status, headers, config) {
             Auth.setCredentials($scope.user.username, $scope.user.password);
             $scope.authSuccessAlert();
+
+            $location.path("/questions");
         };
 
         var error = function(data, status, headers, config) {

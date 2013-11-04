@@ -1,6 +1,6 @@
 <div ng-controller="LoginCtrl" class="row-fluid">
 <div class="row-fluid">
-  <form class="span10 offset2" ng-controller="LoginCtrl" ng-submit="login()">
+  <form class="span10 offset2" ng-controller="LoginCtrl">
       <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
       <img src="img/p2p_logo.jpg" class="img-polaroid" width="120" height="120"/></img>
       <h1>P2P QnA</h1>
@@ -15,9 +15,8 @@
           <input type="checkbox"> Remember me
       </label>
 
-      <button type="submit" ng-click='goNext("/questions")' class="btn btn-success">Login</button>
-
-      <button type="create" ng-click='goNext("/register")' class="btn btn-info">Create Account</button>
+      <button type="submit" ng-click='login()' class="btn btn-success">Login</button>
+      <button ng-click='goNext("/register")' class="btn btn-info">Create Account</button>
 
       <br>
       <a href="#">(Forgot Your Password)</a>
