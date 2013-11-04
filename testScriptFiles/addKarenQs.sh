@@ -1,7 +1,18 @@
 #!/bin/bash
 
-# Add Johnny (question poser)
-curl -i -H "Content-Type: application/json" -X POST -d '{"username":"Johnny","email":"johnny@email.com","password":"johnnypass"}' http://localhost:5000/register
+users=( "Johnny"
+        "Amy"
+        "Timmy"
+        "George"
+        "Alex"
+        "Chad"
+        "Mike"
+        "Brad"
+        "Lisa"
+        "Annie"
+        "Abbie"
+        "Mandy"
+        "Seth" )
 
 
 questions=( "I want to learn how to drive. Where can I go for help?" 
@@ -19,9 +30,37 @@ questions=( "I want to learn how to drive. Where can I go for help?"
             "How do I pay for college?" )
 
 
-#Start adding sample questions from Johnny
+title=( "Living Independently"
+        "Living Independently"
+        "Living Independently"
+        "Living Independently"
+        "Living Independently"
+        "Living Independently"
+        "Living Independently"
+        "Living Independently"
+        "Employment"
+        "Employment"
+        "Post-Secondary Education"
+        "Post-Secondary Education"
+        "Post-Secondary Education" )
+
+COUNTER=0
+
+#Register user then post his question
 for question in "${questions[@]}"
 do
-        curl -u Johnny:johnnypass -i -H "Content-Type: application/json" -X POST -d '{"title": "Test Question", "detailed": "'"$question"'", "tags":""}' http://localhost:5000/questions
+        username=${users[$COUNTER]}
+        strEmail="@email.com"
+        strPass="pass"
+        email=$username$strEmail
+        pass=$username$strPass
+
+        #Register user
+        curl -i -H "Content-Type: application/json" -X POST -d '{"username":"'"$username"'","email":"'"$email"'","password":"'"$pass"'"}' http://localhost:5000/user
+
+        #Ask sample question
+        curl -u $username:$pass -i -H "Content-Type: application/json" -X POST -d '{"title": "'"${title[$COUNTER]}"'", "detailed": "'"$question"'", "tags":""}' http://localhost:5000/questions
+
+        COUNTER=$[COUNTER+1]
 done
 
