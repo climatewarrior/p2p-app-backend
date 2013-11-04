@@ -135,7 +135,7 @@ def get_answer_for_user():
     answer = mongo.db.answers.find({"submitter":auth.username()})
     return dumps(answer), 201
 
-#This function deals with image uploading. Not Complete!
+#This function deals with image uploading.
 @app.route('/upload', methods=['GET', 'POST'])
 @auth.login_required
 def upload():
