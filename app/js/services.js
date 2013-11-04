@@ -24,7 +24,7 @@ p2pServices.factory('User', ['$resource',
 
 p2pServices.factory('Profile', ['$resource',
     function($resource){
-        return $resource('questions/user1-questions.json', {}, {
+        return $resource('user/question', {}, {
             pull: {method:'GET',
                     isArray:true},
         });
@@ -32,7 +32,7 @@ p2pServices.factory('Profile', ['$resource',
 
 p2pServices.factory('ProfileAnswers', ['$resource',
     function($resource){
-        return $resource('user1-answers.json', {}, {
+        return $resource('user/answer', {}, {
             pull: {method:'GET',
                     isArray:true},
         });
