@@ -5,6 +5,7 @@ from flask import Flask, make_response, jsonify, request, abort, url_for, \
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
 from flask.ext.testing import TestCase
+from flask.ext.uploads import UploadSet, IMAGES, configure_uploads 
 from md5 import md5
 from bson.json_util import dumps
 from urlparse import urlparse
@@ -14,6 +15,13 @@ import code, os, bson
 
 app = Flask(__name__, static_url_path='')
 auth = HTTPBasicAuth()
+UPLOADS_DEFAULT_DEST = os.getcwd()+os.sep+'/uploads/'
+app.config['UPLOADS_DEFAULT_DEST'] = UPLOADS_DEFAULT_DEST
+UPLOADS_DEFAULT_URL = '/uploads'
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
+
+
 
 salt = "thisCode1337Safe"
 
@@ -103,9 +111,10 @@ def register():
 
 # This function returns the profile of a specific user
 # Points, Image
-@app.route('/user/<ObjectId:user_id>', methods=["GET"])
-def get_profile(user_id):
-    user = mongo.db.users.find_one(user_id)
+@app.route('/user', methods=["GET"])
+@auth.login_required
+def get_profile():
+    user = mongo.db.users.find_one({"username":auth.username()})
     profile = {}
     profile['username'] = user['username']
     profile['number_of_questions'] = mongo.db.questions.find(
@@ -113,6 +122,39 @@ def get_profile(user_id):
     profile['number_of_answers'] = mongo.db.answers.find(
                                         {"submitter":user['username']}).count()
     return dumps(profile), 201
+
+@app.route('/user/question', methods=["GET"])
+@auth.login_required
+def get_questions_for_user():
+    question = {}
+    question = mongo.db.questions.find({"submitter":auth.username()})  
+    return dumps(question), 201
+
+@app.route('/user/answer', methods=["GET"])
+@auth.login_required
+def get_answer_for_user():
+    answer = mongo.db.answers.find({"submitter":auth.username()})
+    return dumps(answer), 201
+
+#This function deals with image uploading. Not Complete!
+@app.route('/upload', methods=['GET', 'POST'])
+@auth.login_required
+def upload():
+    if request.method == 'POST' and 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+       # rec = Photo(filename=filename, user=auth.username())
+        #rec.store()
+        #flash("Photo saved.")
+        print filename
+    #url_for('get_profile', photo_id=rec.id)
+        #print rec.id
+    return "false alarm", 200
+ #   image = {
+ #            'username':auth.username(),
+ #            'img_uri': rec.id
+ #            }
+ #   mongo.db.images.insert(image)
+
 
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
