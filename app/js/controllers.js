@@ -8,28 +8,31 @@ appControllers.controller('QuestionListCtrl', ['$scope', 'Question',
         $scope.questions = Question.query();
 }]);
 
-appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Question',
-    function($scope, $routeParams, Question) {
+appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeParams', 'Question',
+    function($location, $scope, $routeParams, Question) {
+
+        $scope.answer = {};
+
         $scope.question = Question.get({questionId: $routeParams.questionId}, function(question) {
-        $scope.mainImageUrl = question.images[0];
-    });
-    $scope.setImage = function(imageUrl) {
-        $scope.mainImageUrl = imageUrl;
-    };
-    $scope.goNext = function (hash) {
-        $location.path(hash);
-    };
-    $scope.addAns = function() {
-        Temp.answer();
-    };
-}]);
+            $scope.mainImageUrl = question.images[0];
+        });
 
-appControllers.controller('LoginCtrl', ['$scope', '$location', function($scope, $location) {
-    $scope.goNext = function (hash) {
-        $location.path(hash);
- };
+        $scope.setImage = function(imageUrl) {
+            $scope.mainImageUrl = imageUrl;
+        };
 
-}]);
+        $scope.goNext = function (hash) {
+            $location.path(hash);
+        };
+
+        $scope.addAns = function() {
+            console.log($scope.answer);
+            Question.answer({questionId: $routeParams.questionId}, $scope.answer);
+        };
+
+    }]);
+
+
 
 appControllers.controller('QuestionAskCtrl', ['$scope', '$location', 'Question', function($scope, $location, Question){
     $scope.question = {};

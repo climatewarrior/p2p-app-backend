@@ -11,16 +11,13 @@ p2pServices.factory('Question', ['$resource',
                     params:{questionId:''},
                     isArray:true},
             save: {method:'POST'},
-            answer: {method:'PUT',
-                     params:{questionId:'how-do-i-connect-to-itunes-store'}
-                    },
+            answer: {method:'PUT'},
         });
 }]);
 
-
 p2pServices.factory('User', ['$resource',
     function($resource){
-        return $resource('http://localhost:5000/register', {}, {
+        return $resource('register', {}, {
             save: {method:'POST'}
         });
 }]);
@@ -40,6 +37,7 @@ p2pServices.factory('ProfileAnswers', ['$resource',
                     isArray:true},
         });
 }]);
+
 p2pServices.factory('Auth', ['Base64', '$cookieStore', '$http', function (Base64, $cookieStore, $http) {
     // initialize to whatever is in the cookie, if anything
     $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');

@@ -20,14 +20,14 @@
         </div>
     </div>
     <form novalidate class="css-form" ng-submit="addAns()">
-    <div class="row-fluid">
+        <div class="row-fluid">
             <div class="span4 text-center">
                 <strong>Your Answer</strong>
             </div>
             <div class="span8 text-left">
-                <textarea rows="3"></textarea>
+                <textarea ng-model="answer.answer"></textarea>
             </div>
-    </div>
-    <button class="btn btn-primary" ng-click='goNext("/questions")'>Post Your Answer</button>
+        </div>
+        <button type="submit" ng-click='goNext("/questions")' class="btn btn-primary">Post Your Answer</button>
     </form>
 </div>
