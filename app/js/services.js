@@ -8,7 +8,7 @@ p2pServices.factory('Question', ['$resource',
     function($resource){
         return $resource('questions/:questionId', {}, {
             query: {method:'GET',
-                    params:{questionId:'questions'},
+                    params:{questionId:''},
                     isArray:true},
             save: {method:'POST'},
             answer: {method:'PUT',

@@ -24,7 +24,7 @@ appControllers.controller('QuestionDetailCtrl', ['$scope', '$routeParams', 'Ques
     };
 }]);
 
-appControllers.controller('LoginCtrl', ['$scope', '$location', function($scope, $location) {  
+appControllers.controller('LoginCtrl', ['$scope', '$location', function($scope, $location) {
     $scope.goNext = function (hash) {
         $location.path(hash);
  };
@@ -57,10 +57,12 @@ appControllers.controller('QuestionAskCtrl', ['$scope', '$location', 'Question',
 appControllers.controller('RegisterCtrl', ['$scope', '$location', 'User', function($scope, $location, User){
     $scope.user = {};
 
-
-
     $scope.goNext = function (hash) {
         $location.path(hash);
+    };
+
+    $scope.addUser = function() {
+        User.save({}, $scope.user);
     };
 
 }]);
@@ -90,10 +92,6 @@ appControllers.controller('LoginCtrl', ['$scope', '$location', 'Auth', function(
 
         console.log($scope.user.username);
 
-    $scope.addUser = function() {
-        User.save({}, $scope.user);
-    };
-	
         var success = function(data, status, headers, config) {
             Auth.setCredentials($scope.user.username, $scope.user.password);
             $scope.authSuccessAlert();
@@ -114,7 +112,5 @@ appControllers.controller('MyAnsCtrl', ['$scope', 'ProfileAnswers',
 }]);
 
 appControllers.controller('MyQnsCtrl', ['$scope', 'Profile', function($scope, Profile) {
-appControllers.controller('MyQnsCtrl', ['$scope', 'Profile',
-    function($scope, Profile) {
         $scope.items = Profile.pull();
 }]);
