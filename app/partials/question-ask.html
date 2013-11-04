@@ -1,5 +1,4 @@
-<script type="text/javascript" charset="utf-8" src="phonegap-1.2.0.js"></script>
-    <script type="text/javascript" charset="utf-8">
+<script type="text/javascript" charset="utf-8">
 
     var pictureSource;   // picture source
     var destinationType; // sets the format of returned value
@@ -54,8 +53,6 @@
     function onFail(message) {
       alert('Failed because: ' + message);
     }
-
-
 </script>
 
 
@@ -70,11 +67,12 @@
             <label>Tags (separated by commas)</label>
             <input type="text" id="tags" ng-model="question.tags" required/>
             <p>
-            <button type="submit" class="btn btn-primary" ng-click='goNext("/myQns")'>Submit</button>
-            <button type="reset" class="btn btn-primary">Clear</button>
-                <button onclick="capturePhoto();" class="btn btn-primary">Add Picture</button>
+                <button type="submit" class="btn btn-primary" ng-click='goNext("/myQns")'>Submit</button>
+                <button type="reset" class="btn btn-primary">Clear</button>
+
             </p>
             <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
         </form>
+        <button onclick="capturephoto();" class="btn">Add Picture</button>
     </div>
 </div>
