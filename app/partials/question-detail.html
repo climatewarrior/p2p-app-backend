@@ -14,9 +14,8 @@
     <div class="row-fluid" ng-repeat="answer in question.answers">
         <hr>
         <div class='span2 offset1' ng-include src="'partials/questionf.html'" onload="votes=answer.votes"></div>
-        <div class='span9'>
+        <div class='span9 text-center'>
             <p>{{answer.answer}}</p>
-
         </div>
     </div>
     <form novalidate class="css-form" ng-submit="addAns()">
@@ -28,6 +27,6 @@
                 <textarea ng-model="answer.answer"></textarea>
             </div>
         </div>
-        <button type="submit" ng-click='goNext("/questions")' class="btn btn-primary">Post Your Answer</button>
+        <button type="submit" ng-click='goNext("/profile")' class="btn btn-primary">Post Your Answer</button>
     </form>
 </div>

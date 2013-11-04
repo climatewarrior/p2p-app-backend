@@ -2,7 +2,7 @@
     <script type="text/javascript" charset="utf-8">
 
     var pictureSource;   // picture source
-    var destinationType; // sets the format of returned value 
+    var destinationType; // sets the format of returned value
     document.addEventListener("deviceready",onDeviceReady,false);
 
     function onDeviceReady() {
@@ -45,7 +45,7 @@
 
     function getPhoto(source) {
       // Retrieve image file location from specified source
-      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
         destinationType: destinationType.FILE_URI,
         sourceType: source });
     }
@@ -67,7 +67,7 @@
             <input type="text" id="title" ng-model="question.title" required/>
             <label>What Is Your Question?</label>
             <textarea rows=10 id="content" ng-model="question.detailed"></textarea>
-            <label>Tags</label>
+            <label>Tags (separated by commas)</label>
             <input type="text" id="tags" ng-model="question.tags" required/>
             <p>
             <button type="submit" class="btn btn-primary" ng-click='goNext("/myQns")'>Submit</button>
