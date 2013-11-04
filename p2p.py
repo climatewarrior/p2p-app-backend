@@ -120,6 +120,7 @@ def get_profile():
                                         {"submitter":user['username']}).count()
     profile['number_of_answers'] = mongo.db.answers.find(
                                         {"submitter":user['username']}).count()
+    profile['points'] = 1000
     return dumps(profile), 201
 
 @app.route('/user/question', methods=["GET"])
@@ -135,7 +136,7 @@ def get_answer_for_user():
     answer = mongo.db.answers.find({"submitter":auth.username()})
     return dumps(answer), 201
 
-#This function deals with image uploading. Not Complete!
+#This function deals with image uploading.
 @app.route('/upload', methods=['GET', 'POST'])
 @auth.login_required
 def upload():
