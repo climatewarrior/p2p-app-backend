@@ -46,6 +46,7 @@ appControllers.controller('ProfileCtrl', ['$scope', '$location', 'User', functio
 appControllers.controller('QuestionAskCtrl', ['$scope', '$location', 'Question', function($scope, $location, Question){
     $scope.question = {};
     $scope.alerts = [];
+    $scope.title = "Recent Questions";
 
     $scope.addAlert = function() {
         $scope.alerts.push({type: 'success', msg: "Question submitted!"});
@@ -124,5 +125,5 @@ appControllers.controller('MyAnsCtrl', ['$scope', 'ProfileAnswers',
 }]);
 
 appControllers.controller('MyQnsCtrl', ['$scope', 'Profile', function($scope, Profile) {
-        $scope.items = Profile.pull();
+        $scope.questions = Profile.pull();
 }]);
