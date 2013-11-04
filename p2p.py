@@ -5,7 +5,7 @@ from flask import Flask, make_response, jsonify, request, abort, url_for, \
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
 from flask.ext.testing import TestCase
-from flask.ext.uploads import UploadSet, IMAGES, configure_uploads 
+from flask.ext.uploads import UploadSet, IMAGES, configure_uploads
 from md5 import md5
 from bson.json_util import dumps
 from urlparse import urlparse
@@ -26,7 +26,7 @@ configure_uploads(app, photos)
 salt = "thisCode1337Safe"
 
 MONGO_URL = os.environ.get('MONGOHQ_URL')
- 
+
 if MONGO_URL:
     # Connect to the Heroku Mongo server
     url = urlparse(MONGO_URL)
@@ -85,11 +85,11 @@ def get_recent_questions():
      tmp['submitter'] = q['submitter']
      tmp['votes'] = q['votes']
      tmp['number_of_answers'] = mongo.db.answers.find({"question_id":q['_id']}).count()
-     
+
      list.append(tmp)
     return dumps(list), 201
 
-@app.route('/register', methods=["POST"])
+@app.route('/user', methods=["POST"])
 def register():
     if not request.json:
         abort(400)
@@ -127,7 +127,7 @@ def get_profile():
 @auth.login_required
 def get_questions_for_user():
     question = {}
-    question = mongo.db.questions.find({"submitter":auth.username()})  
+    question = mongo.db.questions.find({"submitter":auth.username()})
     return dumps(question), 201
 
 @app.route('/user/answer', methods=["GET"])
@@ -149,7 +149,7 @@ def upload():
              'img_uri': 'uploads/photos/'+filename
              }
     mongo.db.images.insert(image)
-    
+
     print UPLOADS_DEFAULT_DEST
     return "Successfully uploaded", 201
 
@@ -178,7 +178,7 @@ def add_answser(question_id):
               'question_id':question_id,
               'content':request.json['answer'],
               'submitter':auth.username(),
-              'votes':0     
+              'votes':0
               }
     mongo.db.answers.insert(answer)
     return "ok", 200
