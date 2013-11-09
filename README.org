@@ -3,8 +3,7 @@
    - Flask
    - Flask-PyMongo
    - Flask-HTTPAuth
-   - Flask-Testing
-   - Requests
+   - Requests (For test suite)
    - MongoDB
 ** Populate the DB: python populatedb.py
    - Default Host: localhost
