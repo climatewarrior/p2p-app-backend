@@ -43,7 +43,9 @@ auth = HTTPBasicAuth()
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    print app
+    #return render_template("index.html")
+    return "Hello, world"
 
 @auth.get_password
 def get_password(username):
