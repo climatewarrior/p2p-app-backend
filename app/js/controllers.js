@@ -21,13 +21,10 @@ appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeP
             $scope.mainImageUrl = imageUrl;
         };
 
-        $scope.goNext = function (hash) {
-            $location.path(hash);
-        };
-
         $scope.addAns = function() {
             console.log($scope.answer);
             Question.answer({questionId: $routeParams.questionId}, $scope.answer);
+            $location.path("/profile");
         };
 
     }]);
