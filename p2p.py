@@ -4,7 +4,6 @@ from flask import Flask, make_response, jsonify, request, abort, url_for, \
     render_template
 from flask.ext.httpauth import HTTPBasicAuth
 from flask.ext.pymongo import PyMongo
-from flask.ext.testing import TestCase
 from flask.ext.uploads import UploadSet, IMAGES, configure_uploads
 from md5 import md5
 from bson.json_util import dumps
