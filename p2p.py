@@ -100,7 +100,8 @@ def register():
     user = {
         'username'  : request.json['username'],
         'email'     : request.json['email'],
-        'password'  : pw_hash
+        'password'  : pw_hash,
+        'points'    : 0
     }
 
     mongo.db.users.insert(user)
@@ -118,8 +119,8 @@ def get_profile():
     profile['number_of_questions'] = mongo.db.questions.find(
                                         {"submitter":user['username']}).count()
     profile['number_of_answers'] = mongo.db.answers.find(
-                                        {"submitter":user['username']}).count()
-    profile['points'] = 1000
+                                        {"submitter":user['username']}).count()                
+    profile['points'] = user['points']
     return dumps(profile), 201
 
 @app.route('/user/question', methods=["GET"])
@@ -182,16 +183,68 @@ def get_question(question_id):
     question['answers'] = list
     return dumps(question), 201
 
+
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
-def add_answser(question_id):
-    answer = {
-              'question_id':question_id,
-              'content':request.json['answer'],
-              'submitter':auth.username(),
-              'votes':0
-              }
-    mongo.db.answers.insert(answer)
+def edit_question(question_id):
+    
+    question = mongo.db.questions.find_one(question_id)
+    
+    if('answer' in request.json):
+        answer = {
+                  'question_id'  : question_id,
+                  'content'      : request.json['answer'],
+                  'submitter'    : auth.username(),
+                  'votes'        : 0
+                  }
+        mongo.db.answers.insert(answer)
+        
+    elif('vote' in request.json):
+        if(request.json['vote'] == 'up'):
+            #Increase question votes
+            mongo.db.questions.update(
+                                      { '_id' : question_id },
+                                      { '$inc': {'votes' : 1}}
+                                      )
+        
+            #Increase asker's rep points (+5)
+            mongo.db.users.update(
+                                  { 'username' : question['submitter'] },
+                                  { '$inc': {'points' : 5}}
+                                  )
+        elif(request.json['vote'] == 'down'):
+            #Decrease question votes
+            mongo.db.questions.update(
+                                      { '_id' : question_id },
+                                      { '$inc': {'votes' : -1}}
+                                      )
+        
+            #Decrease asker's rep points (-2)
+            mongo.db.users.update(
+                                  { 'username' : question['submitter'] },
+                                  # We need to enforce unique usernames
+                                  { '$inc': {'points' : -2}}
+                                  )
+        else:
+            return "Bad Request: Vote neither up nor down", 400
+
+    
+#    elif('accepted' in request.json):
+        #if(request.json['accepted'] == 1):
+            ##Change answer to accepted
+            #mongo.db.questions.update(
+                                      #{ '_id' : question_id },
+                                      #{ '$inc': {'votes' : 1}}
+                                   #   )
+            #Increase asker's rep points (+5)
+            #mongo.db.users.update(
+                                  #{ 'username' : auth.username() },
+                                  #{ '$inc': {'points' : 5}}
+                                  #)
+        
+    else:
+        return "Bad Request: Neither answer nor vote field", 400        
+    
     return "ok", 200
 
 @app.route('/questions', methods=['POST'])
@@ -203,14 +256,14 @@ def add_question():
         abort(400)
 
     question = {
-        'votes': 0,
-        'title': request.json['title'],
-        'tags': request.json['tags'].split(','),
-        'detailed': request.json['detailed'],
-        'submitter': auth.username(),
-        'images': {},
-        'answers' : {}
-
+        'votes'         : 0,
+        'title'         : request.json['title'],
+        'tags'          : request.json['tags'].split(','),
+        'detailed'      : request.json['detailed'],
+        'submitter'     : auth.username(),
+        'images'        : {},
+        'answers'       : {},
+        'accepted'      : 0
     }
 
     id = str(mongo.db.questions.insert(question))
