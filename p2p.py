@@ -190,7 +190,7 @@ def edit_question(question_id):
 
     question = mongo.db.questions.find_one(question_id)
 
-    if('answer' in request.json):
+    if 'answer' in request.json:
         answer = {
                   'question_id'  : question_id,
                   'content'      : request.json['answer'],
@@ -199,8 +199,8 @@ def edit_question(question_id):
                   }
         mongo.db.answers.insert(answer)
 
-    elif('vote' in request.json):
-        if(request.json['vote'] == 'up'):
+    elif 'vote' in request.json:
+        if request.json['vote'] == 'up':
             #Increase question votes
             mongo.db.questions.update(
                                       { '_id' : question_id },
@@ -212,7 +212,7 @@ def edit_question(question_id):
                                   { 'username' : question['submitter'] },
                                   { '$inc': {'points' : 5}}
                                   )
-        elif(request.json['vote'] == 'down'):
+        elif request.json['vote'] == 'down':
             #Decrease question votes
             mongo.db.questions.update(
                                       { '_id' : question_id },
