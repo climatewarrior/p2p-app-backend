@@ -9,6 +9,8 @@ from md5 import md5
 from bson.json_util import dumps
 from urlparse import urlparse
 from datetime import date
+from dateutil import parser
+import datetime
 
 import code, os, bson
 
@@ -77,7 +79,7 @@ def get_recent_questions():
     list = []
     for q in questions:
         tmp = {}
-        tmp['posted-epoch-time'] = q['_id'].generation_time
+        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
         tmp['id'] = str(q['_id'])
         tmp['title'] = q['title']
         tmp['tags'] = q['tags']
@@ -112,10 +114,10 @@ def register():
 
 # This function returns the profile of a specific user
 # Points, Image
-@app.route('/user', methods=["GET"])
+@app.route('/user/<username>', methods=["GET"])
 @auth.login_required
 def get_profile():
-    user = mongo.db.users.find_one({"username":auth.username()})
+    user = mongo.db.users.find_one({"username" : username})
     profile = {}
     profile['username'] = user['username']
     profile['number_of_questions'] = mongo.db.questions.find(
@@ -132,7 +134,7 @@ def get_questions_for_user():
     list = []
     for q in questions:
         tmp = {}
-        tmp['posted-epoch-time'] = q['_id'].generation_time
+        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
         tmp['id'] = str(q['_id'])
         tmp['title'] = q['title']
         tmp['tags'] = q['tags']
@@ -167,12 +169,18 @@ def upload():
     print UPLOADS_DEFAULT_DEST
     return "Successfully uploaded", 201
 
+def convert_timestamp_to_epoch(generation_time):
+    epochStartTime = (datetime.datetime(1970,1,1)).replace(tzinfo=None)
+    generationDatetime = (parser.parse(str(generation_time))).replace(tzinfo=None)
+    generationEpochTime = (generationDatetime - epochStartTime).total_seconds()
+    
+    return str(generationEpochTime)
+
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
-
-    question['posted-epoch-time'] = question['_id'].generation_time
-    question['_id'] = str(question['_id'])
+    question['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
+    
     ans = mongo.db.answers.find({"question_id":question_id})
     list= []
     for a in ans:
@@ -180,16 +188,17 @@ def get_question(question_id):
         tmp['author'] = a['submitter']
         tmp['answer'] = a['content']
         tmp['votes'] = a['votes']
-        tmp['posted-epoch-time'] = a['_id'].generation_time
+        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
         list.append(tmp)
     question['answers'] = list
+    question['_id'] = str(question['_id'])
+    
     return dumps(question), 201
 
 
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def edit_question(question_id):
-    
     question = mongo.db.questions.find_one(question_id)
     
     if('answer' in request.json):
