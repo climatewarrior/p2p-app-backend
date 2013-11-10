@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 from flask import Flask, make_response, jsonify, request, abort, url_for, \
     render_template
 from flask.ext.httpauth import HTTPBasicAuth
@@ -171,14 +170,14 @@ def convert_timestamp_to_epoch(generation_time):
     epochStartTime = (datetime.datetime(1970,1,1)).replace(tzinfo=None)
     generationDatetime = (parser.parse(str(generation_time))).replace(tzinfo=None)
     generationEpochTime = (generationDatetime - epochStartTime).total_seconds()
-    
+
     return str(generationEpochTime)
 
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
     question['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
-    
+
     ans = mongo.db.answers.find({"question_id":question_id})
     list= []
     for a in ans:
@@ -190,7 +189,7 @@ def get_question(question_id):
         list.append(tmp)
     question['answers'] = list
     question['_id'] = str(question['_id'])
-    
+
     return dumps(question), 201
 
 

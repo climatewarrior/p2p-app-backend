@@ -3,6 +3,7 @@
    - Flask
    - Flask-PyMongo
    - Flask-HTTPAuth
+   - dateutil
    - Requests (For test suite)
    - MongoDB
 ** Populate the DB: python populatedb.py
