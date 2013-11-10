@@ -1,6 +1,4 @@
 venv
-static
-templates
 *.pyc
 .project
 .pydevproject

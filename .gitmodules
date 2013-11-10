@@ -1,0 +1,3 @@
+[submodule "p2p-app"]
+	path = p2p-app
+	url = git@github.com:climatewarrior/p2p-app.git
