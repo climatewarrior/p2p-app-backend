@@ -44,9 +44,7 @@ auth = HTTPBasicAuth()
 
 @app.route("/")
 def index():
-    print app
-    #return render_template("index.html")
-    return "Hello, world"
+    return render_template("index.html")
 
 @auth.get_password
 def get_password(username):
@@ -79,7 +77,7 @@ def get_recent_questions():
     list = []
     for q in questions:
         tmp = {}
-        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
+        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(q['_id'].generation_time)
         tmp['id'] = str(q['_id'])
         tmp['title'] = q['title']
         tmp['tags'] = q['tags']
@@ -114,16 +112,16 @@ def register():
 
 # This function returns the profile of a specific user
 # Points, Image
-@app.route('/user/<username>', methods=["GET"])
+@app.route('/user', methods=["GET"])
 @auth.login_required
 def get_profile():
-    user = mongo.db.users.find_one({"username" : username})
+    user = mongo.db.users.find_one({"username":auth.username()})
     profile = {}
     profile['username'] = user['username']
     profile['number_of_questions'] = mongo.db.questions.find(
                                         {"submitter":user['username']}).count()
     profile['number_of_answers'] = mongo.db.answers.find(
-                                        {"submitter":user['username']}).count()                
+                                        {"submitter":user['username']}).count()
     profile['points'] = user['points']
     return dumps(profile), 201
 
@@ -188,7 +186,7 @@ def get_question(question_id):
         tmp['author'] = a['submitter']
         tmp['answer'] = a['content']
         tmp['votes'] = a['votes']
-        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
+        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
         list.append(tmp)
     question['answers'] = list
     question['_id'] = str(question['_id'])
@@ -200,8 +198,8 @@ def get_question(question_id):
 @auth.login_required
 def edit_question(question_id):
     question = mongo.db.questions.find_one(question_id)
-    
-    if('answer' in request.json):
+
+    if 'answer' in request.json:
         answer = {
                   'question_id'  : question_id,
                   'content'      : request.json['answer'],
@@ -209,27 +207,27 @@ def edit_question(question_id):
                   'votes'        : 0
                   }
         mongo.db.answers.insert(answer)
-        
-    elif('vote' in request.json):
-        if(request.json['vote'] == 'up'):
+
+    elif 'vote' in request.json:
+        if request.json['vote'] == 'up':
             #Increase question votes
             mongo.db.questions.update(
                                       { '_id' : question_id },
                                       { '$inc': {'votes' : 1}}
                                       )
-        
+
             #Increase asker's rep points (+5)
             mongo.db.users.update(
                                   { 'username' : question['submitter'] },
                                   { '$inc': {'points' : 5}}
                                   )
-        elif(request.json['vote'] == 'down'):
+        elif request.json['vote'] == 'down':
             #Decrease question votes
             mongo.db.questions.update(
                                       { '_id' : question_id },
                                       { '$inc': {'votes' : -1}}
                                       )
-        
+
             #Decrease asker's rep points (-2)
             mongo.db.users.update(
                                   { 'username' : question['submitter'] },
@@ -239,7 +237,7 @@ def edit_question(question_id):
         else:
             return "Bad Request: Vote neither up nor down", 400
 
-    
+
 #    elif('accepted' in request.json):
         #if(request.json['accepted'] == 1):
             ##Change answer to accepted
@@ -252,10 +250,10 @@ def edit_question(question_id):
                                   #{ 'username' : auth.username() },
                                   #{ '$inc': {'points' : 5}}
                                   #)
-        
+
     else:
-        return "Bad Request: Neither answer nor vote field", 400        
-    
+        return "Bad Request: Neither answer nor vote field", 400
+
     return "ok", 200
 
 @app.route('/questions', methods=['POST'])
