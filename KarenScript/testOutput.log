@@ -2,7 +2,7 @@ HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:17 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -10,13 +10,13 @@ Date: Sun, 10 Nov 2013 06:21:17 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 340
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "I want to learn how to drive. Where can I go for help?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05a0"}, "title": "Learning How To Drive", "tags": ["Driving", " Learning"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05a0", "answers": {}, "submitter": "Joy", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "I want to learn how to drive. Where can I go for help?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b78c"}, "title": "Learning How To Drive", "tags": ["Driving", " Learning"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b78c", "answers": {}, "submitter": "Joy", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -24,13 +24,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 374
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "I would like some ideas on places that I can meet and make friends. Any suggestions?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05a2"}, "title": "Places To Meet Friends", "tags": ["Socializing", " Friends"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05a2", "answers": {}, "submitter": "Amy", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "I would like some ideas on places that I can meet and make friends. Any suggestions?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b78e"}, "title": "Places To Meet Friends", "tags": ["Socializing", " Friends"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b78e", "answers": {}, "submitter": "Amy", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -38,13 +38,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 373
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "Someone told me that I might be able to get a service dog to help me. How do I find out more?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05a4"}, "title": "Service Dogs", "tags": ["Dogs", " Service Dogs"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05a4", "answers": {}, "submitter": "Timmy", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "Someone told me that I might be able to get a service dog to help me. How do I find out more?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b790"}, "title": "Service Dogs", "tags": ["Dogs", " Service Dogs"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b790", "answers": {}, "submitter": "Timmy", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -52,13 +52,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 523
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "I think I may qualify for government programs that assist people with disabilities who are unable to work. I am confused about where to start. Can someone point me in the right direction?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05a6"}, "title": "Government Programs with Disabilities", "tags": ["Government", " Government Programs", " Disabilities"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05a6", "answers": {}, "submitter": "George", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "I think I may qualify for government programs that assist people with disabilities who are unable to work. I am confused about where to start. Can someone point me in the right direction?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b792"}, "title": "Government Programs with Disabilities", "tags": ["Government", " Government Programs", " Disabilities"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b792", "answers": {}, "submitter": "George", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -66,13 +66,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 360
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "What other programs are there to help me with some of the things I need?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05a8"}, "title": "General Programs for Help", "tags": ["Programs", " Help"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05a8", "answers": {}, "submitter": "Alex", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "What other programs are there to help me with some of the things I need?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b794"}, "title": "General Programs for Help", "tags": ["Programs", " Help"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b794", "answers": {}, "submitter": "Alex", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -80,13 +80,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 464
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "I have to take medication on a daily basis and am having trouble paying for it. Are there any programs to help me pay for prescription medication?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05aa"}, "title": "Paying for Prescription Medication", "tags": ["Medication", " Prescription", " Budget"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05aa", "answers": {}, "submitter": "Chad", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "I have to take medication on a daily basis and am having trouble paying for it. Are there any programs to help me pay for prescription medication?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b796"}, "title": "Paying for Prescription Medication", "tags": ["Medication", " Prescription", " Budget"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b796", "answers": {}, "submitter": "Chad", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -94,13 +94,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 397
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "I don\u2019t qualify for Medicaid, but I still need low cost health insurance. Where do I look?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05ac"}, "title": "Do Not Qualify for Medicaid", "tags": ["Medicaid", " Health Insurance"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05ac", "answers": {}, "submitter": "Mike", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "I don\u2019t qualify for Medicaid, but I still need low cost health insurance. Where do I look?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b798"}, "title": "Do Not Qualify for Medicaid", "tags": ["Medicaid", " Health Insurance"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b798", "answers": {}, "submitter": "Mike", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -108,13 +108,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 318
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "How do I register to vote?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05ae"}, "title": "Vote Registration", "tags": ["Voting", " Voter Registration"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05ae", "answers": {}, "submitter": "Brad", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "How do I register to vote?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b79a"}, "title": "Vote Registration", "tags": ["Voting", " Voter Registration"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b79a", "answers": {}, "submitter": "Brad", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -122,13 +122,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 383
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
-{"question": {"detailed": "I was asked to bring a resume to a job interview? What is a resume?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05b0"}, "title": "Resume for Job Interview", "tags": ["Employment", " Jobs", " Interviews", " Resumes"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05b0", "answers": {}, "submitter": "Lisa", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "I was asked to bring a resume to a job interview? What is a resume?", "votes": 0, "_id": {"$oid": "527f2ae3e1ffb22dca66b79c"}, "title": "Resume for Job Interview", "tags": ["Employment", " Jobs", " Interviews", " Resumes"], "uri": "http://localhost:5000/questions/527f2ae3e1ffb22dca66b79c", "answers": {}, "submitter": "Lisa", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:43 GMT
 
 {
   "success": "ok!"
@@ -136,13 +136,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 431
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:44 GMT
 
-{"question": {"detailed": "I get nervous when I go on job interviews. Does anybody have any tips to help me develop good interviewing skills?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05b2"}, "title": "Good Interviewing Skills", "tags": ["Employment", " Jobs", " Interviews", " Nervous"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05b2", "answers": {}, "submitter": "Annie", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "I get nervous when I go on job interviews. Does anybody have any tips to help me develop good interviewing skills?", "votes": 0, "_id": {"$oid": "527f2ae4e1ffb22dca66b79e"}, "title": "Good Interviewing Skills", "tags": ["Employment", " Jobs", " Interviews", " Nervous"], "uri": "http://localhost:5000/questions/527f2ae4e1ffb22dca66b79e", "answers": {}, "submitter": "Annie", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:44 GMT
 
 {
   "success": "ok!"
@@ -150,13 +150,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 459
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:44 GMT
 
-{"question": {"detailed": "I am only a freshman in high school, but I want to make sure I am getting ready for college. What can I do now to prepare?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05b4"}, "title": "Freshman Preparing for College", "tags": ["Freshman", " High School", " College", " College Preparation"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05b4", "answers": {}, "submitter": "Abbie", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "I am only a freshman in high school, but I want to make sure I am getting ready for college. What can I do now to prepare?", "votes": 0, "_id": {"$oid": "527f2ae4e1ffb22dca66b7a0"}, "title": "Freshman Preparing for College", "tags": ["Freshman", " High School", " College", " College Preparation"], "uri": "http://localhost:5000/questions/527f2ae4e1ffb22dca66b7a0", "answers": {}, "submitter": "Abbie", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:44 GMT
 
 {
   "success": "ok!"
@@ -164,13 +164,13 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 265
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:44 GMT
 
-{"question": {"detailed": "What is ADA?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05b6"}, "title": "ADA", "tags": ["ADA"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05b6", "answers": {}, "submitter": "Mandy", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
+{"question": {"detailed": "What is ADA?", "votes": 0, "_id": {"$oid": "527f2ae4e1ffb22dca66b7a2"}, "title": "ADA", "tags": ["ADA"], "uri": "http://localhost:5000/questions/527f2ae4e1ffb22dca66b7a2", "answers": {}, "submitter": "Mandy", "images": {}, "accepted": 0}}HTTP/1.0 201 CREATED
 Content-Type: application/json
 Content-Length: 22
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:44 GMT
 
 {
   "success": "ok!"
@@ -178,6 +178,6 @@ Date: Sun, 10 Nov 2013 06:21:18 GMT
 Content-Type: text/html; charset=utf-8
 Content-Length: 320
 Server: Werkzeug/0.9.4 Python/2.7.3
-Date: Sun, 10 Nov 2013 06:21:18 GMT
+Date: Sun, 10 Nov 2013 06:42:44 GMT
 
-{"question": {"detailed": "How do I pay for college?", "votes": 0, "_id": {"$oid": "527f25dee1ffb229153e05b8"}, "title": "Paying for College", "tags": ["College", " Expenses", " Budget"], "uri": "http://localhost:5000/questions/527f25dee1ffb229153e05b8", "answers": {}, "submitter": "Seth", "images": {}, "accepted": 0}}
+{"question": {"detailed": "How do I pay for college?", "votes": 0, "_id": {"$oid": "527f2ae4e1ffb22dca66b7a4"}, "title": "Paying for College", "tags": ["College", " Expenses", " Budget"], "uri": "http://localhost:5000/questions/527f2ae4e1ffb22dca66b7a4", "answers": {}, "submitter": "Seth", "images": {}, "accepted": 0}}

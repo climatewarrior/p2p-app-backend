@@ -2,3 +2,7 @@ venv
 *.pyc
 .project
 .pydevproject
+KarenScript/findOid.log
+KarenScript/questionIDs.log
+KarenScript/testOutput.log
+
