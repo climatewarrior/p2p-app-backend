@@ -76,7 +76,7 @@ def get_recent_questions():
     list = []
     for q in questions:
         tmp = {}
-        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(q['_id'].generation_time)
+        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(q['_id'].generation_time)
         tmp['id'] = str(q['_id'])
         tmp['title'] = q['title']
         tmp['tags'] = q['tags']
@@ -131,7 +131,7 @@ def get_questions_for_user():
     list = []
     for q in questions:
         tmp = {}
-        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
+        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
         tmp['id'] = str(q['_id'])
         tmp['title'] = q['title']
         tmp['tags'] = q['tags']
@@ -171,12 +171,12 @@ def convert_timestamp_to_epoch(generation_time):
     generationDatetime = (parser.parse(str(generation_time))).replace(tzinfo=None)
     generationEpochTime = (generationDatetime - epochStartTime).total_seconds()
 
-    return str(generationEpochTime)
+    return int(generationEpochTime)
 
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
-    question['posted-epoch-time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
+    question['posted_epoch_time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
 
     ans = mongo.db.answers.find({"question_id":question_id})
     list= []
@@ -185,7 +185,7 @@ def get_question(question_id):
         tmp['author'] = a['submitter']
         tmp['answer'] = a['content']
         tmp['votes'] = a['votes']
-        tmp['posted-epoch-time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
+        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
         list.append(tmp)
     question['answers'] = list
     question['_id'] = str(question['_id'])
