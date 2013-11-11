@@ -215,7 +215,19 @@ def edit_question(question_id):
                   'votes'        : 0
                   }
         mongo.db.answers.insert(answer)
-
+    
+    #elif('accepted' in request.json):
+        #if(request.json['accepted'] == 1):
+            ##Change answer to accepted
+            #mongo.db.questions.update(
+                                      #{ '_id' : question_id },
+                                      #{ '$inc': {'votes' : 1}}
+                                   #   )
+            #Increase asker's rep points (+5)
+            #mongo.db.users.update(
+                                  #{ 'username' : auth.username() },
+                                  #{ '$inc': {'points' : 5}}
+                                  #)
     elif 'vote' in request.json:
         if request.json['vote'] == 'up':
             #Increase question votes
@@ -244,23 +256,23 @@ def edit_question(question_id):
                                   )
         else:
             return "Bad Request: Vote neither up nor down", 400
-
-
-#    elif('accepted' in request.json):
-        #if(request.json['accepted'] == 1):
-            ##Change answer to accepted
-            #mongo.db.questions.update(
-                                      #{ '_id' : question_id },
-                                      #{ '$inc': {'votes' : 1}}
-                                   #   )
-            #Increase asker's rep points (+5)
-            #mongo.db.users.update(
-                                  #{ 'username' : auth.username() },
-                                  #{ '$inc': {'points' : 5}}
-                                  #)
+        
+    #Edit a question's title or content
+    elif 'question' in request.json:
+        if 'title' in request.json['question']:
+            mongo.db.questions.update(
+                                      { '_id' : question_id },
+                                      { '$set': {'title' : request.json['question']['title']}}
+                                      )
+        
+        if 'detailed' in request.json['question']:
+            mongo.db.questions.update(
+                                      { '_id' : question_id },
+                                      { '$set': {'detailed' : request.json['question']['detailed']}}
+                                      )
 
     else:
-        return "Bad Request: Neither answer nor vote field", 400
+        return "Bad Request: Neither answer, nor vote, nor question fields", 400
 
     return "ok", 200
 
