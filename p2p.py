@@ -147,7 +147,16 @@ def get_questions_for_user():
 @auth.login_required
 def get_answer_for_user():
     answer = mongo.db.answers.find({"submitter":auth.username()})
-    return dumps(answer), 201
+    list= []
+    for a in answer:
+        tmp = {}
+        tmp['author'] = a['submitter']
+        tmp['answer'] = a['content']
+        tmp['votes'] = a['votes']
+        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
+        list.append(tmp)
+    
+    return dumps(list), 201
 
 #This function deals with image uploading.
 @app.route('/upload', methods=['GET', 'POST'])
