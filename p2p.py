@@ -99,10 +99,12 @@ def register():
 
     pw_hash = md5(request.json['password'] + salt).hexdigest()
     user = {
-        'username'  : request.json['username'],
-        'email'     : request.json['email'],
-        'password'  : pw_hash,
-        'points'    : 0
+        'username'              : request.json['username'],
+        'email'                 : request.json['email'],
+        'password'              : pw_hash,
+        'points'                : 0,
+        'number_of_questions'   : 0,
+        'number_of_answers'   : 0
     }
 
     mongo.db.users.insert(user)
@@ -115,14 +117,21 @@ def register():
 @auth.login_required
 def get_profile(username):
     user = mongo.db.users.find_one({"username":username})
-    profile = {}
-    profile['username'] = username
-    profile['number_of_questions'] = mongo.db.questions.find(
-                                        {"submitter":user['username']}).count()
-    profile['number_of_answers'] = mongo.db.answers.find(
-                                        {"submitter":user['username']}).count()
-    profile['points'] = user['points']
-    return dumps(profile), 201
+    
+    user.pop('email')
+    user.pop('password')
+    
+    #profile = {}
+    
+    #profile['username'] = username
+    #profile['number_of_questions'] = mongo.db.questions.find(
+                                        #{"submitter":user['username']}).count()
+    #profile['number_of_answers'] = mongo.db.answers.find(
+                                        #{"submitter":user['username']}).count()
+    #profile['points'] = user['points']
+    
+    
+    return dumps(user), 201
 
 @app.route('/user/question', methods=["GET"])
 @auth.login_required
@@ -196,6 +205,7 @@ def get_question(question_id):
         tmp['votes'] = a['votes']
         tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
         list.append(tmp)
+        
     question['answers'] = list
     question['_id'] = str(question['_id'])
 
@@ -215,6 +225,12 @@ def edit_question(question_id):
                   'votes'        : 0
                   }
         mongo.db.answers.insert(answer)
+        
+        #Increment the user's numAnswers
+        mongo.db.users.update(
+                              { 'username' : auth.username() },
+                              { '$inc': {'number_of_answers' : 1} }
+                              )
     
     #elif('accepted' in request.json):
         #if(request.json['accepted'] == 1):
@@ -305,6 +321,12 @@ def add_question():
     question['uri'] = url_for('get_question', question_id = id, \
                               _external = True)
 
+    #Increment the asker's numQuestions
+    mongo.db.users.update(
+                              { 'username' : auth.username() },
+                              { '$inc': {'number_of_questions' : 1} }
+                              )
+    
     return dumps( { 'question': question }), 201
 
 if __name__ == "__main__":
