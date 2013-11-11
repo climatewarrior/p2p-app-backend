@@ -120,7 +120,7 @@ def get_profile(username):
     
     user.pop('email')
     user.pop('password')
-    
+    user['_id'] = str(user['_id'])
     #profile = {}
     
     #profile['username'] = username
@@ -130,7 +130,7 @@ def get_profile(username):
                                         #{"submitter":user['username']}).count()
     #profile['points'] = user['points']
     
-    
+    1
     return dumps(user), 201
 
 @app.route('/user/question', methods=["GET"])
@@ -162,6 +162,7 @@ def get_answer_for_user():
         tmp['author'] = a['submitter']
         tmp['answer'] = a['content']
         tmp['votes'] = a['votes']
+        tmp['_id'] = str(a['_id'])
         tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
         list.append(tmp)
     
@@ -203,6 +204,7 @@ def get_question(question_id):
         tmp['author'] = a['submitter']
         tmp['answer'] = a['content']
         tmp['votes'] = a['votes']
+        tmp['_id'] = str(a['_id'])
         tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
         list.append(tmp)
         
