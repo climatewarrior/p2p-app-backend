@@ -131,7 +131,7 @@ def get_questions_for_user():
     list = []
     for q in questions:
         tmp = {}
-        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
+        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(q['_id'].generation_time)
         tmp['id'] = str(q['_id'])
         tmp['title'] = q['title']
         tmp['tags'] = q['tags']
