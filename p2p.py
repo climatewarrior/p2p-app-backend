@@ -111,12 +111,12 @@ def register():
 
 # This function returns the profile of a specific user
 # Points, Image
-@app.route('/user', methods=["GET"])
+@app.route('/user/<username>', methods=["GET"])
 @auth.login_required
-def get_profile():
-    user = mongo.db.users.find_one({"username":auth.username()})
+def get_profile(username):
+    user = mongo.db.users.find_one({"username":username})
     profile = {}
-    profile['username'] = user['username']
+    profile['username'] = username
     profile['number_of_questions'] = mongo.db.questions.find(
                                         {"submitter":user['username']}).count()
     profile['number_of_answers'] = mongo.db.answers.find(
