@@ -270,6 +270,12 @@ def edit_question(question_id):
                                       { '_id' : question_id },
                                       { '$set': {'detailed' : request.json['question']['detailed']}}
                                       )
+        
+        if 'tags' in request.json['question']:
+            mongo.db.questions.update(
+                                      { '_id' : question_id },
+                                      { '$set': {'tags' : request.json['question']['tags']}}
+                                      )
 
     else:
         return "Bad Request: Neither answer, nor vote, nor question fields", 400
