@@ -49,6 +49,8 @@ def index():
 @auth.get_password
 def get_password(username):
     user = mongo.db.users.find_one({"username":username})
+    if not user:
+        return make_response(jsonify( { 'Error': 'User Not Found!' } ), 404)
     return user['password']
 
 @app.route("/test_auth")
@@ -87,6 +89,9 @@ def get_recent_questions():
 
         list.append(tmp)
 
+    if not list:
+        return make_response(jsonify( { 'Error': 'No Questions Found!' } ), 404)
+    
     return dumps(list), 201
 
 @app.route('/user', methods=["POST"])
@@ -118,6 +123,8 @@ def register():
 @auth.login_required
 def get_profile(username):
     user = mongo.db.users.find_one({"username":username})
+    if not user:
+        return make_response(jsonify( { 'Error': 'User Not Found!' } ), 404)
     
     user.pop('email')
     user.pop('password')
@@ -151,12 +158,15 @@ def get_questions_for_user():
         tmp['number_of_answers'] = mongo.db.answers.find({"question_id":q['_id']}).count()
 
         list.append(tmp)
+    
+    if not list:
+        return make_response(jsonify( { 'Error': 'User Has No Questions!' } ), 404)
 
     return dumps(list), 201
 
 @app.route('/user/answer', methods=["GET"])
 @auth.login_required
-def get_answer_for_user():
+def get_answers_for_user():
     answer = mongo.db.answers.find({"submitter":auth.username()})
     list= []
     for a in answer:
@@ -167,7 +177,10 @@ def get_answer_for_user():
         tmp['_id'] = str(a['_id'])
         tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
         list.append(tmp)
-    
+        
+    if not list:
+        return make_response(jsonify( { 'Error': 'User Has No Answers!' } ), 404)
+
     return dumps(list), 201
 
 #This function deals with image uploading.
@@ -223,11 +236,16 @@ def get_question(question_id):
 @auth.login_required
 def delete_question(question_id):
     question = mongo.db.questions.find_one(question_id)
-
+    
+    if not question:
+        return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)
+    
     #If user wants to delete his answer, then remove the doc from the collection
     if 'answer' in request.json:
         ans_id = request.json['answer']['_id']
         answer = mongo.db.answers.find_one({'_id': ObjectId(ans_id)})
+        if not answer:
+            return make_response(jsonify( { 'Error': 'Answer Not Found!' } ), 404)
         
         #Make sure that the answer is tied to the question_id in the URL before deleting it?
         if str(question_id) != str(answer['question_id']):        
@@ -257,6 +275,8 @@ def delete_question(question_id):
 @auth.login_required
 def edit_question(question_id):
     question = mongo.db.questions.find_one(question_id)
+    if not question:
+        return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)
 
     if 'answer' in request.json:
         answer = {
