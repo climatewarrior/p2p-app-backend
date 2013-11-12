@@ -94,7 +94,7 @@ def register():
         'username'              : request.json['username'],
         'email'                 : request.json['email'],
         'password'              : pw_hash,
-        'points'                : 0,
+        'points'                : 1,
         'number_of_questions'   : 0,
         'number_of_answers'     : 0
     }
@@ -105,6 +105,7 @@ def register():
 
 # This function returns the profile of a specific user
 # Points, Image
+
 @app.route('/user/<username>', methods=["GET"])
 @auth.login_required
 def get_profile(username):
@@ -116,16 +117,6 @@ def get_profile(username):
     user.pop('password')
     user['_id'] = str(user['_id'])
     
-    #profile = {}
-    
-    #profile['username'] = username
-    #profile['number_of_questions'] = mongo.db.questions.find(
-                                        #{"submitter":user['username']}).count()
-    #profile['number_of_answers'] = mongo.db.answers.find(
-                                        #{"submitter":user['username']}).count()
-    #profile['points'] = user['points']
-    
-    1
     return dumps(user), 201
 
 @app.route('/user/question', methods=["GET"])
@@ -160,7 +151,8 @@ def get_answers_for_user():
         tmp['author'] = a['submitter']
         tmp['answer'] = a['content']
         tmp['votes'] = a['votes']
-        tmp['_id'] = str(a['_id'])
+        tmp['accepted'] = a['accepted']
+        tmp['answer_id'] = str(a['_id'])
         tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
         list.append(tmp)
         
@@ -170,6 +162,7 @@ def get_answers_for_user():
     return dumps(list), 201
 
 #This function deals with image uploading.
+
 @app.route('/upload', methods=['GET', 'POST'])
 @auth.login_required
 def upload():
@@ -257,83 +250,205 @@ def delete_question(question_id):
     
     return "OK\n", 200
 
+# This function is for adding, editing, (up.down)-voting, and accepting answers.
+# This function is also for editing and (up.down)-voting questions.
+
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def edit_question(question_id):
     question = mongo.db.questions.find_one(question_id)
     if not question:
-        return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)
+        return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)    
 
     if 'answer' in request.json:
-        answer = {
-                  'question_id'  : question_id,
-                  'content'      : request.json['answer'],
-                  'submitter'    : auth.username(),
-                  'votes'        : 0
-                  }
-        mongo.db.answers.insert(answer)
         
-        #Increment the user's numAnswers
-        mongo.db.users.update(
+        # User wants to edit a pre-existing answer
+        if 'answer_id' in request.json['answer']:
+            ans_id = request.json['answer']['answer_id']
+            answer = mongo.db.answers.find_one({'_id': ObjectId(ans_id)})
+        
+            if not answer:
+                return make_response(jsonify( { 'Error': 'Answer Not Found!' } ), 404)
+            
+            #Make sure that the answer is tied to the question_id in the URL before deleting it?
+            if str(question_id) != str(answer['question_id']):        
+                return "The answer you want to edit does not belong to the question you are currently viewing", 403
+            
+            # User wants to (up/down)vote the answer
+            if 'vote' in request.json['answer']:
+                if request.json['answer']['vote'] == 'up':                        
+                    # Increase answer's votes
+                    mongo.db.answers.update(
+                                            { '_id' : ObjectId(ans_id) },
+                                            { '$inc': {'votes' : 1}}
+                                            )
+                
+                    # Increase answer poster's rep points (+10)
+                    mongo.db.users.update(
+                                          { 'username' : answer['submitter'] },
+                                          { '$inc': {'points' : 10}}
+                                          )
+                
+                elif request.json['answer']['vote'] == 'down':
+                    # Decrease answer's votes
+                    mongo.db.answers.update(
+                                              { '_id' : ObjectId(ans_id) },
+                                              { '$inc': {'votes' : -1}}
+                                              )
+                    
+                    # Decrease answer poster's rep points (-2)
+                    mongo.db.users.update(
+                                          { 'username' : answer['submitter'] },            
+                                          { '$inc': {'points' : -2}}
+                                          )
+                    
+                    # Decrease down-voter's rep points (-1)
+                    mongo.db.users.update(
+                                          { 'username' : auth.username() },            
+                                          { '$inc': {'points' : -1}}
+                                          )
+                else:
+                    return "Bad Request: Vote neither up nor down\n", 400
+        
+            # User wants to edit the answer's content
+            elif 'content' in request.json['answer']:
+                # User is allowed to edit only if he is the author of the post
+                if auth.username() == answer['submitter']:
+                    mongo.db.answers.update(
+                                            { '_id' : ObjectId(ans_id) },
+                                            { '$set': {'content' : 
+                                                       request.json['answer']['content']
+                                                       }
+                                             }
+                                            )
+                else:
+                    return "You are not allowed to edit this answer\n", 403
+            
+            # User wants to (un)accept the answer
+            elif 'accepted' in request.json['answer']:
+                # User is allowed to (un)accept the answer only if he is the author of the question
+                if auth.username() == question['submitter']:
+                    accepted_val = request.json['answer']['accepted']
+                    
+                    # Make sure user is changing the value to something different, otherwise... points galore!
+                    if str(accepted_val) == str(answer['accepted']):
+                        return "Bad Request: <Accepted> is already " + accepted_val + "\n", 400
+                    
+                    if accepted_val != '1' and accepted_val != '0': 
+                        return "Bad Request: <Accepted> must either be 0 or 1\n", 400
+                                    
+                    # Edit the accepted field in the answer doc
+                    mongo.db.answers.update(
+                                            { '_id' : ObjectId(ans_id) },
+                                            { '$set': {'accepted' : accepted_val} 
+                                             }
+                                            )
+                    
+                    # The user accepts the answer
+                    if accepted_val == '1':
+                        
+                        # The answer's author's points are affected only if he is not also the question's author
+                        if str(question['submitter']) != str(answer['submitter']):                        
+                            # Increase answer poster's rep points (+15)
+                            mongo.db.users.update(
+                                                  { 'username' : answer['submitter'] },            
+                                                  { '$inc': {'points' : 15}}
+                                                  )
+                            
+                        # Increase the acceptor's rep points (+2)
+                        mongo.db.users.update(
+                                              { 'username' : auth.username() },            
+                                              { '$inc': {'points' : +2}}
+                                              )
+                    # The user unaccepts the answer
+                    elif accepted_val == '0':
+                        
+                        # The answer's author's points are affected only if he is not also the question's author
+                        if str(question['submitter']) != str(answer['submitter']):
+                            # Decrease answer poster's rep points (-15)
+                            mongo.db.users.update(
+                                                  { 'username' : answer['submitter'] },            
+                                                  { '$inc': {'points' : -15}}
+                                                  )
+                        
+                        # Decrease the acceptor's rep points (-2)
+                        mongo.db.users.update(
+                                              { 'username' : auth.username() },            
+                                              { '$inc': {'points' : -2}}
+                                              )
+                    else:    
+                        return "Bad Request: <Accepted> must either be 0 or 1\n", 400
+                else:
+                    return "You are not allowed to accept this answer\n", 403
+            else:
+                return "Bad Request: You must either vote, accept, or edit this answer\n", 400
+                
+        # User wants to create and add an answer to the question
+        elif 'content' in request.json['answer']:
+            answer = {
+                  'question_id'  : question_id,
+                  'content'      : request.json['answer']['content'],
+                  'submitter'    : auth.username(),
+                  'votes'        : 0,
+                  'accepted'     : 0
+                  }
+            mongo.db.answers.insert(answer)
+        
+            #Increment the user's numAnswers
+            mongo.db.users.update(
                               { 'username' : auth.username() },
                               { '$inc': {'number_of_answers' : 1} }
-                              )
-    
-    #elif('accepted' in request.json):
-        #if(request.json['accepted'] == 1):
-            ##Change answer to accepted
-            #mongo.db.questions.update(
-                                      #{ '_id' : question_id },
-                                      #{ '$inc': {'votes' : 1}}
-                                   #   )
-            #Increase asker's rep points (+5)
-            #mongo.db.users.update(
-                                  #{ 'username' : auth.username() },
-                                  #{ '$inc': {'points' : 5}}
-                                  #)
-    elif 'vote' in request.json:
-        if request.json['vote'] == 'up':
-            #Increase question votes
-            mongo.db.questions.update(
-                                      { '_id' : question_id },
-                                      { '$inc': {'votes' : 1}}
-                                      )
-
-            #Increase asker's rep points (+5)
-            mongo.db.users.update(
-                                  { 'username' : question['submitter'] },
-                                  { '$inc': {'points' : 5}}
-                                  )
-        elif request.json['vote'] == 'down':
-            #Decrease question votes
-            mongo.db.questions.update(
-                                      { '_id' : question_id },
-                                      { '$inc': {'votes' : -1}}
-                                      )
-
-            #Decrease asker's rep points (-2)
-            mongo.db.users.update(
-                                  { 'username' : question['submitter'] },
-                                  # We need to enforce unique usernames
-                                  { '$inc': {'points' : -2}}
-                                  )
+                              )                                            
         else:
-            return "Bad Request: Vote neither up nor down\n", 400
+            return "Bad Request: You must either create, vote, accept, or edit an answer\n", 400
         
-    #Edit a question's title or content
     elif 'question' in request.json:
+
+        # Vote the question up or down                                
+        if 'vote' in request.json['question']:
+            if request.json['question']['vote'] == 'up':
+                
+                # Increase question votes
+                mongo.db.questions.update(
+                                          { '_id' : question_id },
+                                          { '$inc': {'votes' : 1}}
+                                          )
+                
+                # Increase asker's rep points (+5)
+                mongo.db.users.update(
+                                      { 'username' : question['submitter'] },
+                                      { '$inc': {'points' : 5}}
+                                      )
+                
+            elif request.json['question']['vote'] == 'down':
+                # Decrease question votes
+                mongo.db.questions.update(
+                                          { '_id' : question_id },
+                                          { '$inc': {'votes' : -1}}
+                                          )
+
+                # Decrease asker's rep points (-2)
+                mongo.db.users.update(
+                                      { 'username' : question['submitter'] },
+                                      # We need to enforce unique usernames
+                                      { '$inc': {'points' : -2}}
+                                      )
+            else:
+                return "Bad Request: Vote neither up nor down\n", 400
+        
+        # Edit a question's title
         if 'title' in request.json['question']:
             mongo.db.questions.update(
                                       { '_id' : question_id },
                                       { '$set': {'title' : request.json['question']['title']}}
                                       )
-        
+        # Edit a question's content
         if 'detailed' in request.json['question']:
             mongo.db.questions.update(
                                       { '_id' : question_id },
                                       { '$set': {'detailed' : request.json['question']['detailed']}}
                                       )
-        
+        # Edit a question's tags
         if 'tags' in request.json['question']:
             mongo.db.questions.update(
                                       { '_id' : question_id },
@@ -341,7 +456,7 @@ def edit_question(question_id):
                                       )
 
     else:
-        return "Bad Request: Neither answer, nor vote, nor question fields\n", 400
+        return "Bad Request: Neither answer, nor question field\n", 400
 
     return "OK\n", 200
 
@@ -361,7 +476,6 @@ def add_question():
         'submitter'     : auth.username(),
         'images'        : {},
         'answers'       : {},
-        'accepted'      : 0
     }
 
     id = str(mongo.db.questions.insert(question))

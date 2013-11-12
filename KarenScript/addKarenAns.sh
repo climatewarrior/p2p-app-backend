@@ -53,7 +53,7 @@ do
         curl -i -H "Content-Type: application/json" -X POST -d '{"username":"'"$username"'","email":"'"$email"'","password":"'"$pass"'"}' http://localhost:5000/user
 
         #Post answer
-        curl -u $username:$pass -i -H "Content-Type: application/json" -X PUT -d '{"answer": "'"$answer"'"}' $url
+        curl -u $username:$pass -i -H "Content-Type: application/json" -X PUT -d '{"answer": {"content":"'"$answer"'"}}' $url
 
         COUNTER=$[COUNTER+1]
      done
