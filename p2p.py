@@ -24,22 +24,8 @@ configure_uploads(app, photos)
 
 salt = "thisCode1337Safe"
 
-MONGO_URL = os.environ.get('MONGOHQ_URL')
-
-if MONGO_URL:
-    # Connect to the Heroku Mongo server
-    url = urlparse(MONGO_URL)
-    app.config['HEROKU_HOST'] = url.hostname
-    app.config['HEROKU_PORT'] = url.port
-    app.config['MONGO_USERNAME'] = url.username
-    app.config['MONGO_PASSWORD'] = url.password
-    app.config['HEROKU_DBNAME'] = MONGO_URL.split('/')[-1]
-    mongo = PyMongo(app, config_prefix='HEROKU')
-
-else:
-    # Connect to MongoDB with the defaults
-    mongo = PyMongo(app)
-
+# Connect to MongoDB with the defaults
+mongo = PyMongo(app)
 auth = HTTPBasicAuth()
 
 @app.route("/")
@@ -67,11 +53,11 @@ def hash_pw(password):
 
 @auth.error_handler
 def unauthorized():
-    return make_response(jsonify( { 'Error': 'Unauthorized access' } ), 401)
+    return make_response(jsonify( { 'Error': 'Unauthorized Access' } ), 401)
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify( { 'Error': 'Not found' } ), 404)
+    return make_response(jsonify( { 'Error': 'Not Found' } ), 404)
 
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
