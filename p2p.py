@@ -6,11 +6,12 @@ from flask.ext.pymongo import PyMongo
 from flask.ext.uploads import UploadSet, IMAGES, configure_uploads
 from md5 import md5
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 from urlparse import urlparse
 from datetime import date
 from dateutil import parser
-import datetime
 
+import datetime
 import code, os, bson
 
 app = Flask(__name__, static_url_path='')
@@ -56,7 +57,7 @@ def test_auth():
     """
     Call this method just to see if auth token works.
     """
-    return "ok", 200
+    return "OK\n", 200
 
 @auth.hash_password
 def hash_pw(password):
@@ -64,11 +65,11 @@ def hash_pw(password):
 
 @auth.error_handler
 def unauthorized():
-    return make_response(jsonify( { 'error': 'Unauthorized access' } ), 401)
+    return make_response(jsonify( { 'Error': 'Unauthorized access\n' } ), 401)
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify( { 'error': 'Not found' } ), 404)
+    return make_response(jsonify( { 'Error': 'Not found\n' } ), 404)
 
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
@@ -104,12 +105,12 @@ def register():
         'password'              : pw_hash,
         'points'                : 0,
         'number_of_questions'   : 0,
-        'number_of_answers'   : 0
+        'number_of_answers'     : 0
     }
 
     mongo.db.users.insert(user)
 
-    return make_response(jsonify( { 'success': 'ok!' } ), 201)
+    return make_response(jsonify( { 'Success': 'OK!\n' } ), 201)
 
 # This function returns the profile of a specific user
 # Points, Image
@@ -121,6 +122,7 @@ def get_profile(username):
     user.pop('email')
     user.pop('password')
     user['_id'] = str(user['_id'])
+    
     #profile = {}
     
     #profile['username'] = username
@@ -183,7 +185,7 @@ def upload():
     mongo.db.images.insert(image)
 
     print UPLOADS_DEFAULT_DEST
-    return "Successfully uploaded", 201
+    return "Successfully Uploaded\n", 201
 
 def convert_timestamp_to_epoch(generation_time):
     epochStartTime = (datetime.datetime(1970,1,1)).replace(tzinfo=None)
@@ -195,6 +197,10 @@ def convert_timestamp_to_epoch(generation_time):
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
+    
+    if not question:
+        return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)
+    
     question['posted_epoch_time'] = convert_timestamp_to_epoch(question['_id'].generation_time)
 
     ans = mongo.db.answers.find({"question_id":question_id})
@@ -213,6 +219,39 @@ def get_question(question_id):
 
     return dumps(question), 201
 
+@app.route('/questions/<ObjectId:question_id>', methods=["DELETE"])
+@auth.login_required
+def delete_question(question_id):
+    question = mongo.db.questions.find_one(question_id)
+
+    #If user wants to delete his answer, then remove the doc from the collection
+    if 'answer' in request.json:
+        ans_id = request.json['answer']['_id']
+        answer = mongo.db.answers.find_one({'_id': ObjectId(ans_id)})
+        
+        #Make sure that the answer is tied to the question_id in the URL before deleting it?
+        if str(question_id) != str(answer['question_id']):        
+            return "The answer you want to delete does not belong to the question you are currently viewing", 403
+        
+        #Make sure the author of the answer is the same person who is deleting it
+        if auth.username() == answer['submitter']:        
+            mongo.db.answers.remove( {'_id': ObjectId(ans_id)} )
+        else:
+            return "You are not allowed to delete this answer\n", 403
+            
+    #If user wants to delete his question, then remove the doc from the collection
+    elif 'question' in request.json:
+        
+        #Make sure the author of the question is the same who is deleting it
+        if auth.username() == question['submitter']:        
+            mongo.db.questions.remove( {'_id': ObjectId(question_id)} )
+        else:
+            return "You are not allowed to delete this question\n", 403
+        
+    else:
+        return "Bad Request: Neither question, nor answer field in delete request\n", 400
+    
+    return "OK\n", 200
 
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
@@ -273,7 +312,7 @@ def edit_question(question_id):
                                   { '$inc': {'points' : -2}}
                                   )
         else:
-            return "Bad Request: Vote neither up nor down", 400
+            return "Bad Request: Vote neither up nor down\n", 400
         
     #Edit a question's title or content
     elif 'question' in request.json:
@@ -296,9 +335,9 @@ def edit_question(question_id):
                                       )
 
     else:
-        return "Bad Request: Neither answer, nor vote, nor question fields", 400
+        return "Bad Request: Neither answer, nor vote, nor question fields\n", 400
 
-    return "ok", 200
+    return "OK\n", 200
 
 @app.route('/questions', methods=['POST'])
 @auth.login_required
