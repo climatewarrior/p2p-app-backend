@@ -65,11 +65,11 @@ def hash_pw(password):
 
 @auth.error_handler
 def unauthorized():
-    return make_response(jsonify( { 'Error': 'Unauthorized access\n' } ), 401)
+    return make_response(jsonify( { 'Error': 'Unauthorized access' } ), 401)
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify( { 'Error': 'Not found\n' } ), 404)
+    return make_response(jsonify( { 'Error': 'Not found' } ), 404)
 
 @app.route("/questions", methods=['GET'])
 def get_recent_questions():
@@ -110,7 +110,7 @@ def register():
 
     mongo.db.users.insert(user)
 
-    return make_response(jsonify( { 'Success': 'OK!\n' } ), 201)
+    return make_response(jsonify( { 'Success': 'OK!' } ), 201)
 
 # This function returns the profile of a specific user
 # Points, Image
@@ -210,7 +210,7 @@ def get_question(question_id):
         tmp['author'] = a['submitter']
         tmp['answer'] = a['content']
         tmp['votes'] = a['votes']
-        tmp['_id'] = str(a['_id'])
+        tmp['answer_id'] = str(a['_id'])
         tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
         list.append(tmp)
         
