@@ -15,8 +15,8 @@
                     </span>
                 </p>
                 <p class="muted">
-                    Posted on: {{question.posted_epoch_time | date:'short'}}
-                    by <a href="#">{{question.submitter}}</a>
+                    Posted on: {{question.posted_epoch_time * 1000 | date:'short'}}
+                    by <a href="#/user/{{question.submitter}}">{{question.submitter}}</a>
                 </p>
                 <hr></hr>
             </div>

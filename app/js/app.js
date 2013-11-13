@@ -21,5 +21,6 @@ p2pApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/myQns', {templateUrl: 'partials/question-my-question.html', controller: 'MyQnsCtrl'});
   $routeProvider.when('/myAns', {templateUrl: 'partials/question-my-answer.html', controller: 'MyAnsCtrl'});
   $routeProvider.when('/profile', {templateUrl: 'partials/profile.html', controller: 'ProfileCtrl'});
+  $routeProvider.when('/user/:username', {templateUrl: 'partials/profile.html', controller: 'ProfileCtrl'});
   $routeProvider.otherwise({redirectTo: '/login'});
 }]);

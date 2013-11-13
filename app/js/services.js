@@ -17,7 +17,7 @@ p2pServices.factory('Question', ['$resource',
 
 p2pServices.factory('User', ['$resource',
     function($resource){
-        return $resource('user', {}, {
+        return $resource('user/:username', {}, {
             save: {method:'POST'},
             getInfo: {method:'GET'},
         });
