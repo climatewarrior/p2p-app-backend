@@ -23,7 +23,9 @@ appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeP
 
         $scope.addAns = function() {
             console.log($scope.answer);
-            Question.answer({questionId: $routeParams.questionId}, $scope.answer);
+            Question.answer({questionId: $routeParams.questionId},
+                            {"answer":{
+                                "content":$scope.answer}});
             $location.path("/profile");
         };
 
