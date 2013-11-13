@@ -206,7 +206,8 @@ def get_question(question_id):
     for a in ans:
         tmp = {}
         tmp['author'] = a['submitter']
-        tmp['answer'] = a['content']
+        # TODO: Fix this, why is this so nested?
+        tmp['content'] = a['content']['answer']
         tmp['votes'] = a['votes']
         tmp['answer_id'] = str(a['_id'])
         tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
@@ -262,6 +263,9 @@ def delete_question(question_id):
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def edit_question(question_id):
+
+    print request.json
+
     question = mongo.db.questions.find_one(question_id)
     if not question:
         return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)
@@ -320,13 +324,10 @@ def edit_question(question_id):
             elif 'content' in request.json['answer']:
                 # User is allowed to edit only if he is the author of the post
                 if auth.username() == answer['submitter']:
-                    mongo.db.answers.update(
-                                            { '_id' : ObjectId(ans_id) },
-                                            { '$set': {'content' :
-                                                       request.json['answer']['content']
-                                                       }
-                                             }
-                                            )
+
+                    new_ans = { '_id' : ObjectId(ans_id) },
+                    { '$set': {'content' : request.json['answer']['content']}}
+                    mongo.db.answers.update(new_ans)
                 else:
                     return "You are not allowed to edit this answer\n", 403
 
