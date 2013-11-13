@@ -54,6 +54,7 @@ appControllers.controller('QuestionAskCtrl', ['$scope', '$location', 'Question',
     $scope.addQuestion = function () {
         Question.save({}, $scope.question);
         $scope.addAlert();
+        $location.path("/profile");
     };
 
     $scope.goNext = function (hash) {
