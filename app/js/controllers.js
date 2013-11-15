@@ -126,11 +126,29 @@ appControllers.controller('LoginCtrl', ['$scope', '$location', 'Auth', function(
 
 }]);
 
-appControllers.controller('MyAnsCtrl', ['$scope', 'ProfileAnswers',
-    function($scope, ProfileAnswers) {
-        $scope.items = ProfileAnswers.pull();
-}]);
 
-appControllers.controller('MyQnsCtrl', ['$scope', 'Profile', function($scope, Profile) {
-        $scope.questions = Profile.pull();
-}]);
+appControllers.controller('ProfileCtrl', ['$scope', '$location', '$routeParams', 'User', function($scope, $location, $routeParams, User) {
+
+        $scope.goNext = function (hash) {
+            $location.path(hash);
+        };
+        $scope.user = User.get({username:$routeParams.username});
+    }]);
+	
+appControllers.controller('MyAnsCtrl', ['$scope', '$location', '$routeParams', 'ProfileAnswers', function($scope, $location, $routeParams, ProfileAnswers) {
+
+        $scope.goNext = function (hash) {
+            $location.path(hash);
+        };
+        $scope.ProfileAnswers = ProfileAnswers.get({username:$routeParams.username});
+    }]);
+
+appControllers.controller('MyQnsCtrl', ['$scope', '$location', '$routeParams', 'Profile', function($scope, $location, $routeParams, Profile) {
+
+        $scope.goNext = function (hash) {
+            $location.path(hash);
+        };
+        $scope.Profile = Profile.get({username:$routeParams.username});
+    }]);	
+
+

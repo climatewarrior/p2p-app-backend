@@ -1,6 +1,6 @@
 <!-- <div ng-controller="ButtonsCtrl" class="row-fluid"> -->
 <div align="center" ng-controller="ProfileCtrl" class="row-fluid">
-  <h3>My Profile</h3>
+  <h3>{{user.username}}'s Profile</h3>
 </div>
 <p>
 
@@ -19,23 +19,23 @@
 
   <ul class="nav nav-pills nav-stacked">
   <li class="active">
-    <a href="#">
+    <a href="#/user/{{user.username}}">
       <span class="badge pull-right">{{user.points}}</span>
-      Points
+      {{user.username}}'s Points
     </a>
   </li>
 
    <li class="active">
-    <a href="#/myQns">
+    <a href="#/myQns"><!--/{{user.username}}-->
       <span class="badge pull-right">{{user.number_of_questions}} Questions Asked</span>
-      My Questions
+      {{user.username}}'s Questions
     </a>
   </li>
 
    <li class="active">
-    <a href="#/myAns">
+    <a href="#/myAns"><!--/{{user.username}}-->
       <span class="badge pull-right">{{user.number_of_answers}} Questions Answered</span>
-      My Answers
+      {{user.username}}'s Answers
     </a>
   </li>
 
