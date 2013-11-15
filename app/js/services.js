@@ -68,6 +68,26 @@ p2pServices.factory('Auth', ['Base64', '$cookieStore', '$http', function (Base64
     };
 }]);
 
+p2pServices.factory('cordovaReady', [function () {
+        return function (fn) {
+            var queue = [],
+            impl = function () {
+                queue.push([].slice.call(arguments));
+            };
+
+            document.addEventListener('deviceready', function () {
+                queue.forEach(function (args) {
+                    fn.apply(this, args);
+                });
+                impl = fn;
+            }, false);
+
+            return function () {
+                return impl.apply(this, arguments);
+            };
+        };
+    }]);
+
 p2pServices.factory('Base64', function() {
     var keyStr = 'ABCDEFGHIJKLMNOP' +
         'QRSTUVWXYZabcdef' +

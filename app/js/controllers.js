@@ -61,6 +61,13 @@ appControllers.controller('QuestionAskCtrl', ['$scope', '$location', 'Question',
         $location.path(hash);
     };
 
+    $scope.myPictures = [];
+    $scope.$watch('myPicture', function(value) {
+        if(value) {
+            myPictures.push(value);
+        }
+    }, true);
+
 }]);
 
 appControllers.controller('RegisterCtrl', ['$scope', '$location', 'User', function($scope, $location, User){
