@@ -115,6 +115,16 @@ def get_profile(username):
 
     user.pop('email')
     user.pop('password')
+
+
+    if user['points'] > 25:
+        user['profile_image'] = 'mario_medium.jpg'
+    elif user['points'] > 50:
+        user['profile_image'] = 'mario_cape.jpg'
+    else:
+        user['profile_image'] = 'mario_small.jpg'
+
+
     user['_id'] = str(user['_id'])
 
     return dumps(user), 201
@@ -470,6 +480,7 @@ def edit_question(question_id):
 @app.route('/questions', methods=['POST'])
 @auth.login_required
 def add_question():
+    print request.json
     data_fields = ("title", "detailed", "tags")
     if not all(d in request.json for d in data_fields):
         abort(400)
