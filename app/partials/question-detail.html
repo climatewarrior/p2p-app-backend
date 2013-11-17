@@ -1,22 +1,35 @@
 <div ng-controller="QuestionDetailCtrl">
     <div class="row-fluid">
-            <uservote class='span2 offset1' data="question.votes"></uservote>
-            <div class="span9">
-                <strong>{{question.title}}</strong>
-                <p>
-                    <span ng-repeat="tag in question.tags">
-                        <span class="badge">{{tag}}</span>
-                    </span>
-                </p>
-                <p>{{question.detailed}}</p>
-            </div>
+        <uservote class='span2 offset1' data="question.votes"></uservote>
+        <div class='span9'>
+            <strong>{{question.title}}</strong>
+            <p>
+                <span ng-repeat="tag in question.tags">
+                    <span class="badge">{{tag}}</span>
+                </span>
+            </p>
+            <p>{{question.detailed}}</p>
+        </div>
+        <div class='offset6'>
+            <p class="muted text-center">
+                Posted on: {{question.posted_epoch_time * 1000 | date:'short'}}
+                by <a href="#/user/{{question.submitter}}">{{question.submitter}}</a>
+            </p>
+        </div>
     </div>
+    <hr>
     <div class="row-fluid" ng-repeat="answer in question.answers">
-        <hr>
         <uservote class='span2 offset1' data="answer.votes"></uservote>
-        <div class='span9 text-center'>
+        <div class='span9'>
             <p>{{answer.content}}</p>
         </div>
+        <div class='offset6'>
+            <p class="muted text-center">
+                Posted on: {{answer.posted_epoch_time * 1000 | date:'short'}}
+                by <a href="#/user/{{answer.author}}">{{question.submitter}}</a>
+            </p>
+        </div>
+        <hr>
     </div>
     <form novalidate class="css-form" ng-submit="addAns()">
         <div class="row-fluid">
@@ -24,9 +37,9 @@
                 <strong>Your Answer</strong>
             </div>
             <div class="span8 text-left">
+                <button type="submit" class="btn btn-primary">Post Your Answer</button>
                 <textarea ng-model="answer.answer"></textarea>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Post Your Answer</button>
     </form>
 </div>
