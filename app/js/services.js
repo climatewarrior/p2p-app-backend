@@ -84,6 +84,9 @@ p2pServices.factory('Auth', ['Base64', '$cookieStore', '$http', function (Base64
             document.execCommand("ClearAuthenticationCache");
             $cookieStore.remove('authdata');
             $http.defaults.headers.common.Authorization = 'Basic ';
+        },
+        retrieveCredentials: function() {
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');
         }
     };
 }]);
