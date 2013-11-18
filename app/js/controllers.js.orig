@@ -120,7 +120,12 @@ appControllers.controller('LoginCtrl', ['$scope', '$location', 'Auth', function(
 
 }]);
 
+<<<<<<< HEAD
+appControllers.controller('ProfileCtrl', ['$scope', '$location', '$routeParams', 'User', function($scope, $location, $routeParams, User) {
+=======
+
 appControllers.controller('ProfileCtrl', ['$scope', '$location', '$routeParams', 'User', 'Auth', function($scope, $location, $routeParams, User, Auth) {
+>>>>>>> a6eae352eac9d647313fb3466d7e4f081dd17622
 
         $scope.goNext = function (hash) {
             $location.path(hash);
@@ -162,5 +167,12 @@ appControllers.controller('OtherQnsCtrl', ['$scope', '$location', '$routeParams'
         $scope.goNext = function (hash) {
             $location.path(hash);
         };
+<<<<<<< HEAD
         $scope.questions = OtherQuestions.getInfo({username:$routeParams.username});
+    }]);	
+
+
+=======
+        $scope.Profile = Profile.get({username:$routeParams.username});
     }]);
+>>>>>>> a6eae352eac9d647313fb3466d7e4f081dd17622

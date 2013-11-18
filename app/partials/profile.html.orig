@@ -12,6 +12,21 @@
         </div>
     </div>
 
+<<<<<<< HEAD
+   <li class="active">
+    <a href="#/userQns/{{user.username}}"><!--/{{user.username}}-->
+      <span class="badge pull-right">{{user.number_of_questions}} Questions Asked</span>
+      {{user.username}}'s Questions
+    </a>
+  </li>
+
+   <li class="active">
+    <a href="#/userAns/{{user.username}}"><!--/{{user.username}}-->
+      <span class="badge pull-right">{{user.number_of_answers}} Questions Answered</span>
+      {{user.username}}'s Answers
+    </a>
+  </li>
+=======
     <ul class="nav nav-pills nav-stacked">
         <li class="active">
             <a href="#/user/{{user.username}}">
@@ -21,14 +36,15 @@
         </li>
 
         <li class="active">
-    <a href="#/userQns/{{user.username}}"><!--/{{user.username}}-->
+            <a href="#/myQns"><!--/{{user.username}}-->
                 <span class="badge pull-right">{{user.number_of_questions}} Questions Asked</span>
                 {{user.username}}'s Questions
             </a>
         </li>
+>>>>>>> a6eae352eac9d647313fb3466d7e4f081dd17622
 
         <li class="active">
-    <a href="#/userAns/{{user.username}}"><!--/{{user.username}}-->
+            <a href="#/myAns"><!--/{{user.username}}-->
                 <span class="badge pull-right">{{user.number_of_answers}} Questions Answered</span>
                 {{user.username}}'s Answers
             </a>
