@@ -12,7 +12,7 @@
         </div>
         <div class='offset6'>
             <p class="muted text-center">
-                Posted on: {{question.posted_epoch_time * 1000 | date:'short'}}
+                Posted on: {{question.posted_epoch_time | date:'short'}}
                 by <a href="#/user/{{question.submitter}}">{{question.submitter}}</a>
             </p>
         </div>
@@ -25,7 +25,7 @@
         </div>
         <div class='offset6'>
             <p class="muted text-center">
-                Posted on: {{answer.posted_epoch_time * 1000 | date:'short'}}
+                Posted on: {{answer.posted_epoch_time | date:'short'}}
                 by <a href="#/user/{{answer.author}}">{{answer.author}}</a>
             </p>
         </div>
