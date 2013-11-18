@@ -129,12 +129,17 @@ appControllers.controller('LoginCtrl', ['$scope', '$location', 'Auth', function(
 }]);
 
 
-appControllers.controller('ProfileCtrl', ['$scope', '$location', '$routeParams', 'User', function($scope, $location, $routeParams, User) {
+appControllers.controller('ProfileCtrl', ['$scope', '$location', '$routeParams', 'User', 'Auth', function($scope, $location, $routeParams, User, Auth) {
 
         $scope.goNext = function (hash) {
             $location.path(hash);
         };
         $scope.user = User.get({username:$routeParams.username});
+
+        $scope.logout = function() {
+            Auth.clearCredentials();
+            $location.path("/login");
+        };
     }]);
 
 appControllers.controller('MyAnsCtrl', ['$scope', '$location', '$routeParams', 'ProfileAnswers', function($scope, $location, $routeParams, ProfileAnswers) {
