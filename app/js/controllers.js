@@ -21,11 +21,17 @@ appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeP
         };
 
         $scope.addAns = function() {
-            console.log(Auth.retrieveCredentials());
             $scope.question.answers.push({votes: 0,
                                           content: $scope.answer.answer,
                                           posted_epoch_time: (new Date).getTime()/1000,
                                           author: Auth.retrieveCredentials()});
+
+            $scope.answerForm.$setPristine();
+            var defaultForm = {
+                answer: ""
+            };
+
+            $scope.answer = defaultForm;
             Question.answer({questionId: $routeParams.questionId},
                             {"answer":{
                                 "content":$scope.answer}});
@@ -125,6 +131,7 @@ appControllers.controller('ProfileCtrl', ['$scope', '$location', '$routeParams',
         $scope.goNext = function (hash) {
             $location.path(hash);
         };
+
         $scope.user = User.get({username:$routeParams.username});
 
         $scope.logout = function() {

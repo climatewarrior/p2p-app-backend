@@ -31,14 +31,14 @@
         </div>
         <hr>
     </div>
-    <form novalidate class="css-form" ng-submit="addAns()">
+    <form name="answerForm" ng-submit="addAns()">
         <div class="row-fluid">
             <div class="span4 text-center">
                 <strong>Your Answer</strong>
             </div>
             <div class="span8 text-left">
                 <button type="submit" class="btn btn-primary">Post Your Answer</button>
-                <textarea ng-model="answer.answer"></textarea>
+                <textarea ngMinlength="10" ng-model="answer.answer" required></textarea>
             </div>
         </div>
     </form>
