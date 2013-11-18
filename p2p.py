@@ -177,7 +177,6 @@ def get_answers_for_a_general_user(username):
 
     return dumps(list), 201
 
-
 @app.route('/user/question', methods=["GET"])
 @auth.login_required
 def get_questions_for_logged_in_user():
@@ -317,6 +316,7 @@ def delete_question(question_id):
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def edit_question(question_id):
+    
 
     print request.json
 
@@ -455,10 +455,11 @@ def edit_question(question_id):
                   }
             mongo.db.answers.insert(answer)
 
-            #Increment the user's numAnswers
+            #Increment the user's numAnswers and points by 1
             mongo.db.users.update(
                               { 'username' : auth.username() },
-                              { '$inc': {'number_of_answers' : 1} }
+                              { '$inc': {'number_of_answers' : 1,
+                                         'points' : 1} }
                               )
         else:
             return "Bad Request: You must either create, vote, accept, or edit an answer\n", 400
@@ -543,10 +544,11 @@ def add_question():
     question['uri'] = url_for('get_question', question_id = id, \
                               _external = True)
 
-    #Increment the asker's numQuestions
+    #Increment the asker's numQuestions by 1 and points by 2
     mongo.db.users.update(
                               { 'username' : auth.username() },
-                              { '$inc': {'number_of_questions' : 1} }
+                              { '$inc': {'number_of_questions' : 1, 
+                                         'points' : 2} }
                               )
 
     return dumps( { 'question': question }), 201
