@@ -205,13 +205,20 @@ def get_answers_for_logged_in_user():
     answer = mongo.db.answers.find({"submitter":auth.username()})
     list= []
     for a in answer:
+        question = mongo.db.questions.find_one(ObjectId(a['question_id']))
+        
+        if not question:
+            return "Question " + str(a['question_id']) + " not found\n", 404
+        
+        q_user = mongo.db.users.find_one({"username":str(question['submitter'])})
+          
         tmp = {}
-        tmp['author'] = a['submitter']
-        tmp['answer'] = a['content']
-        tmp['votes'] = a['votes']
-        tmp['accepted'] = a['accepted']
-        tmp['answer_id'] = str(a['_id'])
-        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
+        tmp['id'] = str(question['_id'])
+        tmp['title'] = question['title']
+        tmp['submitter'] = q_user['username']
+        tmp['submitter_user_points'] = q_user['points']
+        tmp['tags'] = question['tags']
+        
         list.append(tmp)
 
     if not list:
