@@ -12,7 +12,7 @@
         </div>
         <div class='offset6'>
             <p class="muted text-center">
-                Posted on: {{question.posted_epoch_time * 1000 | date:'short'}}
+                Posted on: {{question.posted_epoch_time | date:'short'}}
                 by <a href="#/user/{{question.submitter}}">{{question.submitter}}</a>
             </p>
         </div>
@@ -25,20 +25,20 @@
         </div>
         <div class='offset6'>
             <p class="muted text-center">
-                Posted on: {{answer.posted_epoch_time * 1000 | date:'short'}}
+                Posted on: {{answer.posted_epoch_time | date:'short'}}
                 by <a href="#/user/{{answer.author}}">{{answer.author}}</a>
             </p>
         </div>
         <hr>
     </div>
-    <form novalidate class="css-form" ng-submit="addAns()">
+    <form name="answerForm" ng-submit="addAns()">
         <div class="row-fluid">
             <div class="span4 text-center">
                 <strong>Your Answer</strong>
             </div>
             <div class="span8 text-left">
                 <button type="submit" class="btn btn-primary">Post Your Answer</button>
-                <textarea ng-model="answer.answer"></textarea>
+                <textarea ngMinlength="10" ng-model="answer.answer" required></textarea>
             </div>
         </div>
     </form>
