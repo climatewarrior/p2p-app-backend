@@ -2,13 +2,13 @@
 <h3 align="center">My Answers</h3>
         <div class="row-fluid" ng-repeat="answer in answers">
             <div class="span2 offset1 muted text-center">
-                <bold>{{answer.votes}}</bold>
+                <bold>{{answer.id}}</bold>
                 <p>votes</p>
-                <bold>{{answer.answers}}</bold>
+                <bold>{{answer.title}}</bold>
                 <p>answers</p>
             </div>
             <div class="span9">
-                <a href="#/questions/{{answer.id}}"><strong>{{answer.snippet}}</strong></a>
+                <a href="#/questions/{{answer.id}}"><strong>{{answer.submitter}}</strong></a>
                 <p>
                     <span ng-repeat="tag in answer.tags">
                         <span class="badge">{{tag}}</span>
@@ -16,7 +16,7 @@
                 </p>
                 <p class="muted">
                     Posted on: {{answer.posted-epoch-time | date:'short'}}
-                    by <a href="#">{{answer.submitter}}</a>
+                    by <a href="#/user/{{answer.submitter}}">{{answer.submitter}}</a>
                 </p>
                 <hr></hr>
             </div>
