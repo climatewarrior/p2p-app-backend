@@ -257,7 +257,7 @@ def convert_timestamp_to_epoch(generation_time):
     generationDatetime = (parser.parse(str(generation_time))).replace(tzinfo=None)
     generationEpochTime = (generationDatetime - epochStartTime).total_seconds()
 
-    return int(generationEpochTime)
+    return int(generationEpochTime) * 1000
 
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
 def get_question(question_id):
@@ -293,27 +293,27 @@ def delete_question(question_id):
     if not question:
         return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)
 
-    #If user wants to delete his answer, then remove the doc from the collection
+    # If user wants to delete his answer, then remove the doc from the collection
     if 'answer' in request.json:
         ans_id = request.json['answer']['_id']
         answer = mongo.db.answers.find_one({'_id': ObjectId(ans_id)})
         if not answer:
             return make_response(jsonify( { 'Error': 'Answer Not Found!' } ), 404)
 
-        #Make sure that the answer is tied to the question_id in the URL before deleting it?
+        # Make sure that the answer is tied to the question_id in the URL before deleting it?
         if str(question_id) != str(answer['question_id']):
             return "The answer you want to delete does not belong to the question you are currently viewing", 403
 
-        #Make sure the author of the answer is the same person who is deleting it
+        # Make sure the author of the answer is the same person who is deleting it
         if auth.username() == answer['submitter']:
             mongo.db.answers.remove( {'_id': ObjectId(ans_id)} )
         else:
             return "You are not allowed to delete this answer\n", 403
 
-    #If user wants to delete his question, then remove the doc from the collection
+    # If user wants to delete his question, then remove the doc from the collection
     elif 'question' in request.json:
 
-        #Make sure the author of the question is the same who is deleting it
+        # Make sure the author of the question is the same who is deleting it
         if auth.username() == question['submitter']:
             mongo.db.questions.remove( {'_id': ObjectId(question_id)} )
         else:
@@ -331,7 +331,6 @@ def delete_question(question_id):
 @auth.login_required
 def edit_question(question_id):
     
-
     print request.json
 
     question = mongo.db.questions.find_one(question_id)
@@ -433,7 +432,7 @@ def edit_question(question_id):
                         # Increase the acceptor's rep points (+2)
                         mongo.db.users.update(
                                               { 'username' : auth.username() },
-                                              { '$inc': {'points' : +2}}
+                                              { '$inc': {'points' : 2}}
                                               )
                     # The user unaccepts the answer
                     elif accepted_val == '0':
