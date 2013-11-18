@@ -8,8 +8,7 @@ appControllers.controller('QuestionListCtrl', ['$scope', 'Question',
         $scope.questions = Question.query();
 }]);
 
-appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeParams', 'Question',
-    function($location, $scope, $routeParams, Question) {
+appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeParams', 'Question', 'Auth', function($location, $scope, $routeParams, Question, Auth) {
 
         $scope.answer = {};
 
@@ -22,11 +21,14 @@ appControllers.controller('QuestionDetailCtrl', ['$location', '$scope', '$routeP
         };
 
         $scope.addAns = function() {
-            console.log($scope.answer);
+            console.log(Auth.retrieveCredentials());
+            $scope.question.answers.push({votes: 0,
+                                          content: $scope.answer.answer,
+                                          posted_epoch_time: (new Date).getTime()/1000,
+                                          author: Auth.retrieveCredentials()});
             Question.answer({questionId: $routeParams.questionId},
                             {"answer":{
                                 "content":$scope.answer}});
-            $location.path("/profile");
         };
 
     }]);
@@ -134,7 +136,7 @@ appControllers.controller('ProfileCtrl', ['$scope', '$location', '$routeParams',
         };
         $scope.user = User.get({username:$routeParams.username});
     }]);
-	
+
 appControllers.controller('MyAnsCtrl', ['$scope', '$location', '$routeParams', 'ProfileAnswers', function($scope, $location, $routeParams, ProfileAnswers) {
 
         $scope.goNext = function (hash) {
@@ -149,6 +151,4 @@ appControllers.controller('MyQnsCtrl', ['$scope', '$location', '$routeParams', '
             $location.path(hash);
         };
         $scope.Profile = Profile.get({username:$routeParams.username});
-    }]);	
-
-
+    }]);

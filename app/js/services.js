@@ -79,14 +79,18 @@ p2pServices.factory('Auth', ['Base64', '$cookieStore', '$http', function (Base64
 
             $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
             $cookieStore.put('authdata', encoded);
+            $cookieStore.put('username', username);
         },
         clearCredentials: function () {
             document.execCommand("ClearAuthenticationCache");
             $cookieStore.remove('authdata');
+            $cookieStore.remove('username');
             $http.defaults.headers.common.Authorization = 'Basic ';
         },
         retrieveCredentials: function() {
             $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');
+
+            return $cookieStore.get('username');
         }
     };
 }]);
