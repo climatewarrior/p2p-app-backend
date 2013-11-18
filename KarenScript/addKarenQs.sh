@@ -44,19 +44,19 @@ title=( "Learning How To Drive"
         "ADA"
         "Paying for College" )
 
-tags=( "Driving, Learning"
-        "Socializing, Friends"
-        "Dogs, Service Dogs"
-        "Government, Government Programs, Disabilities"
-        "Programs, Help"
-        "Medication, Prescription, Budget"
-        "Medicaid, Health Insurance"
-        "Voting, Voter Registration"
-        "Employment, Jobs, Interviews, Resumes"
-        "Employment, Jobs, Interviews, Nervous"
-        "Freshman, High School, College, College Preparation"
+tags=( "Driving,Learning"
+        "Socializing,Friends"
+        "Dogs,Service Dogs"
+        "Government,Government Programs,Disabilities"
+        "Programs,Help"
+        "Medication,Prescription,Budget"
+        "Medicaid,Health Insurance"
+        "Voting,Voter Registration"
+        "Employment,Jobs,Interviews,Resumes"
+        "Employment,Jobs,Interviews,Nervous"
+        "Freshman,High School,College,College Preparation"
         "ADA"
-        "College, Expenses, Budget" )
+        "College,Expenses,Budget" )
 
 COUNTER=0
 
