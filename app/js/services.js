@@ -23,7 +23,7 @@ p2pServices.factory('User', ['$resource',
         });
 }]);
 
-p2pServices.factory('Profile', ['$resource',
+p2pServices.factory('ProfileQuestions', ['$resource',
     function($resource){
         return $resource('user/question', {}, {
             pull: {method:'GET',
@@ -43,19 +43,21 @@ p2pServices.factory('ProfileAnswers', ['$resource',
         });
 }]);
 
-p2pServices.factory('UserQuestions', ['$resource',
+p2pServices.factory('OtherQuestions', ['$resource',
     function($resource){
         return $resource('user/:username/question', {}, {
             save: {method:'POST'},
-            getInfo: {method:'GET'},
+            getInfo: {method:'GET',
+						isArray:true},
         });
 }]);
 
-p2pServices.factory('UserAnswers', ['$resource',
+p2pServices.factory('OtherAnswers', ['$resource',
     function($resource){
-        return $resource('user/answer', {}, {
+        return $resource('user/:username/answer', {}, {
             save: {method:'POST'},
-            getInfo: {method:'GET'},
+            getInfo: {method:'GET',
+						isArray:true},
         });
 }]);
 

@@ -22,8 +22,8 @@ p2pApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/myQns', {templateUrl: 'partials/question-my-question.html', controller: 'MyQnsCtrl'});
   $routeProvider.when('/myAns', {templateUrl: 'partials/question-my-answer.html', controller: 'MyAnsCtrl'});
 
-  $routeProvider.when('/userQns/:username', {templateUrl: 'partials/question-my-question.html', controller: 'MyQnsCtrl'});
-  $routeProvider.when('/userAns/:username', {templateUrl: 'partials/question-my-answer.html', controller: 'MyAnsCtrl'});
+  $routeProvider.when('/userQns/:username', {templateUrl: 'partials/question-other-question.html', controller: 'OtherQnsCtrl'});
+  $routeProvider.when('/userAns/:username', {templateUrl: 'partials/question-other-answer.html', controller: 'OtherAnsCtrl'});
 
   $routeProvider.when('/profile', {templateUrl: 'partials/profile.html', controller: 'ProfileCtrl'});
   $routeProvider.when('/user/:username', {templateUrl: 'partials/profile.html', controller: 'ProfileCtrl'});
