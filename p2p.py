@@ -100,7 +100,7 @@ def register():
     }
 
     mongo.db.users.insert(user)
-
+    
     return make_response(jsonify( { 'Success': 'OK!' } ), 201)
 
 # This function returns the profile of a specific user
@@ -135,9 +135,52 @@ def get_user_profile():
     #TODO Fix this hack
     return get_profile(auth.username())
 
+@app.route('/user/<username>/question', methods=["GET"])
+@auth.login_required
+def get_questions_for_a_general_user(username):
+    questions = mongo.db.questions.find({"submitter":username})
+    list = []
+    for q in questions:
+        tmp = {}
+        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(q['_id'].generation_time)
+        tmp['id'] = str(q['_id'])
+        tmp['title'] = q['title']
+        tmp['tags'] = q['tags']
+        tmp['submitter'] = q['submitter']
+        tmp['votes'] = q['votes']
+        tmp['number_of_answers'] = mongo.db.answers.find({"question_id":q['_id']}).count()
+
+        list.append(tmp)
+
+    if not list:
+        return make_response(jsonify( { 'Error': 'User Has No Questions!' } ), 404)
+
+    return dumps(list), 201
+
+@app.route('/user/<username>/answer', methods=["GET"])
+@auth.login_required
+def get_answers_for_a_general_user(username):
+    answer = mongo.db.answers.find({"submitter":username})
+    list= []
+    for a in answer:
+        tmp = {}
+        tmp['author'] = a['submitter']
+        tmp['answer'] = a['content']
+        tmp['votes'] = a['votes']
+        tmp['accepted'] = a['accepted']
+        tmp['answer_id'] = str(a['_id'])
+        tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)
+        list.append(tmp)
+
+    if not list:
+        return make_response(jsonify( { 'Error': 'User Has No Answers!' } ), 404)
+
+    return dumps(list), 201
+
+
 @app.route('/user/question', methods=["GET"])
 @auth.login_required
-def get_questions_for_user():
+def get_questions_for_logged_in_user():
     questions = mongo.db.questions.find({"submitter":auth.username()})
     list = []
     for q in questions:
@@ -159,7 +202,7 @@ def get_questions_for_user():
 
 @app.route('/user/answer', methods=["GET"])
 @auth.login_required
-def get_answers_for_user():
+def get_answers_for_logged_in_user():
     answer = mongo.db.answers.find({"submitter":auth.username()})
     list= []
     for a in answer:
@@ -176,6 +219,7 @@ def get_answers_for_user():
         return make_response(jsonify( { 'Error': 'User Has No Answers!' } ), 404)
 
     return dumps(list), 201
+
 
 #This function deals with image uploading.
 
