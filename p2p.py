@@ -161,12 +161,21 @@ def get_questions_for_a_general_user(username):
 @auth.login_required
 def get_answers_for_a_general_user(username):
     answer = mongo.db.answers.find({"submitter":username})
-    list= []
+    list = []
+    q_list = []
+    
     for a in answer:
-        question = mongo.db.questions.find_one(ObjectId(a['question_id']))
+        q_id = a['question_id']
+        question = mongo.db.questions.find_one(ObjectId(q_id))
         
         if not question:
-            return "Question " + str(a['question_id']) + " not found\n", 404
+            return "Question " + str(q_id) + " not found\n", 404
+        
+        # Check if question is already part of output
+        if not str(q_id) in q_list:
+            q_list.append(str(q_id))
+        else:
+            continue
         
         q_user = mongo.db.users.find_one({"username":str(question['submitter'])})
           
@@ -210,12 +219,21 @@ def get_questions_for_logged_in_user():
 @auth.login_required
 def get_answers_for_logged_in_user():
     answer = mongo.db.answers.find({"submitter":auth.username()})
-    list= []
+    list = []
+    q_list = []
+    
     for a in answer:
-        question = mongo.db.questions.find_one(ObjectId(a['question_id']))
+        q_id = a['question_id']
+        question = mongo.db.questions.find_one(ObjectId(q_id))
         
         if not question:
-            return "Question " + str(a['question_id']) + " not found\n", 404
+            return "Question " + str(q_id) + " not found\n", 404
+        
+        # Check if question is already part of output
+        if not str(q_id) in q_list:
+            q_list.append(str(q_id))
+        else:
+            continue
         
         q_user = mongo.db.users.find_one({"username":str(question['submitter'])})
           
@@ -273,8 +291,7 @@ def get_question(question_id):
     for a in ans:
         tmp = {}
         tmp['author'] = a['submitter']
-        # TODO: Fix this, why is this so nested?
-        tmp['content'] = a['content']['answer']
+        tmp['content'] = a['content']
         tmp['votes'] = a['votes']
         tmp['answer_id'] = str(a['_id'])
         tmp['posted_epoch_time'] = convert_timestamp_to_epoch(a['_id'].generation_time)

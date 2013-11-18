@@ -1,0 +1,38 @@
+<div ng-controller="ProfileCtrl" class="row-fluid">
+    <div align="center" class="row-fluid">
+        <h3>{{user.username}}'s Profile</h3>
+    </div>
+
+    <div align="center" class="row-fluid">
+        <div class="span2">
+            <img src="img/{{user.profile_image}}"></img>
+        </div>
+        <div class="span2">
+            <h4>{{user.username}}</h4>
+        </div>
+    </div>
+
+    <ul class="nav nav-pills nav-stacked">
+        <li class="active">
+            <a href="#/user/{{user.username}}">
+                <span class="badge pull-right">{{user.points}}</span>
+                {{user.username}}'s Points
+            </a>
+        </li>
+
+        <li class="active">
+    <a href="#/userQns/{{user.username}}"><!--/{{user.username}}-->
+                <span class="badge pull-right">{{user.number_of_questions}} Questions Asked</span>
+                {{user.username}}'s Questions
+            </a>
+        </li>
+
+        <li class="active">
+    <a href="#/userAns/{{user.username}}"><!--/{{user.username}}-->
+                <span class="badge pull-right">{{user.number_of_answers}} Questions Answered</span>
+                {{user.username}}'s Answers
+            </a>
+        </li>
+    </ul>
+    <a ng-click="logout()">logout</a>
+</div>

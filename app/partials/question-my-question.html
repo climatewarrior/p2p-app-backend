@@ -1,0 +1,25 @@
+<div ng-controller="MyQnsCtrl">
+    <h3 align="center">My Questions</h3>
+        <div class="row-fluid" ng-repeat="question in questions">
+            <div class="span2 offset1 muted text-center">
+                <bold>{{question.votes}}</bold>
+                <p>votes</p>
+                <bold>{{question.number_of_answers}}</bold>
+                <p>answers</p>
+            </div>
+            <div class="span9">
+                <a href="#/questions/{{question.id}}"><strong>{{question.title}}</strong></a>
+                <p>
+                    <span ng-repeat="tag in question.tags">
+                        <span class="badge">{{tag}}</span>
+                    </span>
+                </p>
+                <p class="muted">
+                    Posted on: {{question.posted-epoch-time | date:'short'}}
+                    by <a href="#">{{question.submitter}}</a>
+                </p>
+                <hr></hr>
+            </div>
+
+        </div>
+</div>

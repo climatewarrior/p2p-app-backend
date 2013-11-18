@@ -1,0 +1,24 @@
+<div ng-controller="QuestionListCtrl">
+    <h3 align="center">Recent Questions</h3>
+        <div class="row-fluid" ng-repeat="question in questions">
+            <div class="span2 offset1 muted text-center">
+                <bold>{{question.votes}}</bold>
+                <p>votes</p>
+                <bold>{{question.number_of_answers}}</bold>
+                <p>answers</p>
+            </div>
+            <div class="span9">
+                <a href="#/questions/{{question.id}}"><strong>{{question.title}}</strong></a>
+                <p>
+                    <span ng-repeat="tag in question.tags">
+                        <span class="badge">{{tag}}</span>
+                    </span>
+                </p>
+                <p class="muted">
+                    Posted on: {{question.posted_epoch_time | date:'short'}}
+                    by <a href="#/user/{{question.submitter}}">{{question.submitter}}</a>
+                </p>
+                <hr>
+            </div>
+        </div>
+</div>

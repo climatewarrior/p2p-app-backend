@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 venv
 *.pyc
 .project
@@ -6,3 +7,7 @@ KarenScript/findOid.log
 KarenScript/questionIDs.log
 KarenScript/testOutput.log
 
+=======
+logs/*
+!.gitkeep
+>>>>>>> 14a9a512c38d34f378167d2d9a81ebc3130473b2
