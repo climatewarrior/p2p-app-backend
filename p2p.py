@@ -28,8 +28,15 @@ levels = (
         (650, 949), (950, 1299), (1300, 1699), (1700, 2149), (2150, 3000)
         )
 
-avatars = ('pic0.jpg','pic1.jpg','pic2.jpg','pic3.jpg','pic4.jpg',
-           'pic5.jpg','pic6.jpg','pic7.jpg','pic8.jpg','pic9.jpg')
+avatars = (
+           ('mpic0.jpg', 'fpic0.jpg'), ('mpic1.jpg', 'fpic1.jpg'),
+           ('mpic2.jpg', 'fpic2.jpg'), ('mpic3.jpg', 'fpic3.jpg'),
+           ('mpic4.jpg', 'fpic4.jpg'), ('mpic5.jpg', 'fpic5.jpg'),
+           ('mpic6.jpg', 'fpic6.jpg'), ('mpic7.jpg', 'fpic7.jpg'),
+           ('mpic8.jpg', 'fpic8.jpg'), ('mpic9.jpg', 'fpic9.jpg')
+           )
+
+           
 
 salt = "thisCode1337Safe"
 
@@ -94,14 +101,20 @@ def register():
     if not request.json:
         abort(400)
 
-    data_fields = ("username", "password", "email")
+    data_fields = ("username", "password", "email", "gender")
     if not all(d in request.json for d in data_fields):
-        abort(400)
+        return "Username, password, email, and gender are required", 400
 
+    gender = request.json['gender']
+    if gender != 'male' and gender != 'female' \
+     and gender != 'other' and gender != 'none' :
+        return "Gender is not one of the four pre-defined types", 400
+    
     pw_hash = md5(request.json['password'] + salt).hexdigest()
     user = {
         'username'              : request.json['username'],
         'email'                 : request.json['email'],
+        'gender'                : gender,
         'password'              : pw_hash,
         'points'                : 1,
         'number_of_questions'   : 0,
@@ -151,13 +164,21 @@ def get_profile(username):
     # Update user's level and avatar based on current points for JSON output
     for level in range(len(levels[curr_level:])):
         if user_pts >= levels[level][0] and \
-        user_pts <= levels[level][1]:
+         user_pts <= levels[level][1]:
             user['current_level'] = level
             user['previous_level_points'] = levels[level][0]
             user['next_level_points'] = levels[level][1] 
-            user['profile_image'] = avatars[level]
             user['points'] = user_pts
             new_level = level
+            
+            if user['gender'] == 'male' or user['gender'] == 'none' \
+             or user['gender'] == 'other':
+                 user['profile_image'] = avatars[level][0]
+            elif user['gender'] == 'female': 
+                user['profile_image'] = avatars[level][1]
+            else:
+                return "Gender is not one of the four pre-defined types", 400
+            
             break
     
     # Update user's current_level in DB
