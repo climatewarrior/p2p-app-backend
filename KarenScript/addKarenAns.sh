@@ -50,7 +50,7 @@ do
         pass=$username$strPass
 
         #Register user
-        curl -i -H "Content-Type: application/json" -X POST -d '{"username":"'"$username"'","email":"'"$email"'","password":"'"$pass"'"}' http://localhost:5000/user
+        curl -i -H "Content-Type: application/json" -X POST -d '{"username":"'"$username"'","email":"'"$email"'","password":"'"$pass"'","gender":"female"}' http://localhost:5000/user
 
         #Post answer
         curl -u $username:$pass -i -H "Content-Type: application/json" -X PUT -d '{"answer": {"content":"'"$answer"'"}}' $url
