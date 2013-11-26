@@ -13,6 +13,7 @@ from dateutil import parser
 
 import datetime
 import code, os, bson
+from mx.Tools.Tools import username
 
 app = Flask(__name__, static_url_path='')
 auth = HTTPBasicAuth()
@@ -21,6 +22,14 @@ app.config['UPLOADS_DEFAULT_DEST'] = UPLOADS_DEFAULT_DEST
 UPLOADS_DEFAULT_URL = '/uploads'
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
+
+levels = (
+        (0, 49), (50, 149), (150, 299), (300, 499), (500, 649), 
+        (650, 949), (950, 1299), (1300, 1699), (1700, 2149), (2150, 3000)
+        )
+
+avatars = ('pic0.jpg','pic1.jpg','pic2.jpg','pic3.jpg','pic4.jpg',
+           'pic5.jpg','pic6.jpg','pic7.jpg','pic8.jpg','pic9.jpg')
 
 salt = "thisCode1337Safe"
 
@@ -96,7 +105,8 @@ def register():
         'password'              : pw_hash,
         'points'                : 1,
         'number_of_questions'   : 0,
-        'number_of_answers'     : 0
+        'number_of_answers'     : 0,
+        'current_level'         : 0
     }
 
     mongo.db.users.insert(user)
@@ -115,19 +125,51 @@ def get_profile(username):
 
     user.pop('email')
     user.pop('password')
-
-
-    if user['points'] > 25:
-        user['profile_image'] = 'mario_medium.jpg'
-    elif user['points'] > 50:
-        user['profile_image'] = 'mario_cape.jpg'
-    else:
-        user['profile_image'] = 'mario_small.jpg'
-
-
     user['_id'] = str(user['_id'])
-
-    return dumps(user), 201
+    user_pts = user['points']
+    curr_level = user['current_level']
+    new_level = None
+    
+    print "points: " + str(user_pts)
+    
+    
+    # Enforce point-bounds  
+    if user_pts > 3000:
+        user_pts = 3000
+        mongo.db.users.update(
+                          { 'username' : username },
+                          { '$set': {'points' : user_pts}}
+                          )
+    elif user_pts < 1:
+        user_pts = 1
+        mongo.db.users.update(
+                          { 'username' : username },
+                          { '$set': {'points' : user_pts}}
+                          )
+    
+    
+    # Update user's level and avatar based on current points for JSON output
+    for level in range(len(levels[curr_level:])):
+        if user_pts >= levels[level][0] and \
+        user_pts <= levels[level][1]:
+            user['current_level'] = level
+            user['previous_level_points'] = levels[level][0]
+            user['next_level_points'] = levels[level][1] 
+            user['profile_image'] = avatars[level]
+            user['points'] = user_pts
+            new_level = level
+            break
+    
+    # Update user's current_level in DB
+    if new_level != None and new_level != curr_level:
+        mongo.db.users.update(
+                              { 'username' : username },
+                              { '$set': {'current_level' : 
+                                         user['current_level']
+                                         }}
+                              )
+    
+    return dumps(user) + '\n', 201
 
 @app.route('/user', methods=["GET"])
 @auth.login_required
@@ -196,6 +238,9 @@ def get_answers_for_a_general_user(username):
 @app.route('/user/question', methods=["GET"])
 @auth.login_required
 def get_questions_for_logged_in_user():
+    return get_questions_for_a_general_user(auth.username())
+    
+    '''
     questions = mongo.db.questions.find({"submitter":auth.username()})
     list = []
     for q in questions:
@@ -213,12 +258,15 @@ def get_questions_for_logged_in_user():
     if not list:
         return make_response(jsonify( { 'Error': 'User Has No Questions!' } ), 404)
 
-    return dumps(list), 201
+    return dumps(list), 201'''
 
 @app.route('/user/answer', methods=["GET"])
 @auth.login_required
 def get_answers_for_logged_in_user():
-    answer = mongo.db.answers.find({"submitter":auth.username()})
+    return get_answers_for_a_general_user(auth.username())
+
+    '''answer = mongo.db.answers.find({"submitter":auth.username()})
+    
     list = []
     q_list = []
     
@@ -249,7 +297,7 @@ def get_answers_for_logged_in_user():
     if not list:
         return make_response(jsonify( { 'Error': 'User Has No Answers!' } ), 404)
 
-    return dumps(list), 201
+    return dumps(list), 201'''
 
 
 #This function deals with image uploading.
@@ -278,6 +326,7 @@ def convert_timestamp_to_epoch(generation_time):
     return int(generationEpochTime) * 1000
 
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
+@auth.login_required
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
 
