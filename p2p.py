@@ -13,7 +13,7 @@ from dateutil import parser
 
 import datetime
 import code, os, bson
-from mx.Tools.Tools import username
+#from mx.Tools.Tools import username
 
 app = Flask(__name__, static_url_path='')
 auth = HTTPBasicAuth()
@@ -109,6 +109,11 @@ def register():
     if gender != 'male' and gender != 'female' \
      and gender != 'other' and gender != 'none' :
         return "Gender is not one of the four pre-defined types", 400
+    
+    username = request.json['username']
+    user = mongo.db.users.find_one({"username":username})
+    if user:
+        return make_response(jsonify( { 'Error': 'Username has already existed!' } ), 400)
     
     pw_hash = md5(request.json['password'] + salt).hexdigest()
     user = {
