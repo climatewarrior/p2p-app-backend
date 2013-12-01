@@ -24,7 +24,7 @@ photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 
 levels = (
-        (0, 49), (50, 149), (150, 299), (300, 499), (500, 649), 
+        (0, 49), (50, 149), (150, 299), (300, 499), (500, 649),
         (650, 949), (950, 1299), (1300, 1699), (1700, 2149), (2150, 3000)
         )
 
@@ -36,7 +36,7 @@ avatars = (
            ('mpic8.jpg', 'fpic8.jpg'), ('mpic9.jpg', 'fpic9.jpg')
            )
 
-           
+
 
 salt = "thisCode1337Safe"
 
@@ -61,7 +61,9 @@ def test_auth():
     """
     Call this method just to see if auth token works.
     """
-    return "OK\n", 200
+    user = mongo.db.users.find_one({"username":auth.username()})
+
+    return dumps(user)
 
 @auth.hash_password
 def hash_pw(password):
@@ -106,19 +108,20 @@ def register():
         return "Username, password, email, and gender are required", 400
 
     gender = request.json['gender']
-    if gender != 'male' and gender != 'female' \
-     and gender != 'other' and gender != 'none' :
+    gender_fields = ("male", "female", "other", "none")
+    if not gender in gender_fields:
         return "Gender is not one of the four pre-defined types", 400
-    
+
     username = request.json['username']
     user = mongo.db.users.find_one({"username":username})
     if user:
         return make_response(jsonify( { 'Error': 'Username has already existed!' } ), 400)
-    
+
     pw_hash = md5(request.json['password'] + salt).hexdigest()
     user = {
         'username'              : request.json['username'],
         'email'                 : request.json['email'],
+        'role'                  : request.json['role'],
         'gender'                : gender,
         'password'              : pw_hash,
         'points'                : 1,
@@ -128,7 +131,7 @@ def register():
     }
 
     mongo.db.users.insert(user)
-    
+
     return make_response(jsonify( { 'Success': 'OK!' } ), 201)
 
 # This function returns the profile of a specific user
@@ -147,11 +150,11 @@ def get_profile(username):
     user_pts = user['points']
     curr_level = user['current_level']
     new_level = None
-    
+
     print "points: " + str(user_pts)
-    
-    
-    # Enforce point-bounds  
+
+
+    # Enforce point-bounds
     if user_pts > 3000:
         user_pts = 3000
         mongo.db.users.update(
@@ -164,37 +167,37 @@ def get_profile(username):
                           { 'username' : username },
                           { '$set': {'points' : user_pts}}
                           )
-    
-    
+
+
     # Update user's level and avatar based on current points for JSON output
     for level in range(len(levels[curr_level:])):
         if user_pts >= levels[level][0] and \
          user_pts <= levels[level][1]:
             user['current_level'] = level
             user['previous_level_points'] = levels[level][0]
-            user['next_level_points'] = levels[level][1] 
+            user['next_level_points'] = levels[level][1]
             user['points'] = user_pts
             new_level = level
-            
+
             if user['gender'] == 'male' or user['gender'] == 'none' \
              or user['gender'] == 'other':
                  user['profile_image'] = avatars[level][0]
-            elif user['gender'] == 'female': 
+            elif user['gender'] == 'female':
                 user['profile_image'] = avatars[level][1]
             else:
                 return "Gender is not one of the four pre-defined types", 400
-            
+
             break
-    
+
     # Update user's current_level in DB
     if new_level != None and new_level != curr_level:
         mongo.db.users.update(
                               { 'username' : username },
-                              { '$set': {'current_level' : 
+                              { '$set': {'current_level' :
                                          user['current_level']
                                          }}
                               )
-    
+
     return dumps(user) + '\n', 201
 
 @app.route('/user', methods=["GET"])
@@ -231,29 +234,29 @@ def get_answers_for_a_general_user(username):
     answer = mongo.db.answers.find({"submitter":username})
     list = []
     q_list = []
-    
+
     for a in answer:
         q_id = a['question_id']
         question = mongo.db.questions.find_one(ObjectId(q_id))
-        
+
         if not question:
             return "Question " + str(q_id) + " not found\n", 404
-        
+
         # Check if question is already part of output
         if not str(q_id) in q_list:
             q_list.append(str(q_id))
         else:
             continue
-        
+
         q_user = mongo.db.users.find_one({"username":str(question['submitter'])})
-          
+
         tmp = {}
         tmp['id'] = str(question['_id'])
         tmp['title'] = question['title']
         tmp['submitter'] = q_user['username']
         tmp['submitter_user_points'] = q_user['points']
         tmp['tags'] = question['tags']
-        
+
         list.append(tmp)
 
     if not list:
@@ -265,7 +268,7 @@ def get_answers_for_a_general_user(username):
 @auth.login_required
 def get_questions_for_logged_in_user():
     return get_questions_for_a_general_user(auth.username())
-    
+
     '''
     questions = mongo.db.questions.find({"submitter":auth.username()})
     list = []
@@ -292,32 +295,32 @@ def get_answers_for_logged_in_user():
     return get_answers_for_a_general_user(auth.username())
 
     '''answer = mongo.db.answers.find({"submitter":auth.username()})
-    
+
     list = []
     q_list = []
-    
+
     for a in answer:
         q_id = a['question_id']
         question = mongo.db.questions.find_one(ObjectId(q_id))
-        
+
         if not question:
             return "Question " + str(q_id) + " not found\n", 404
-        
+
         # Check if question is already part of output
         if not str(q_id) in q_list:
             q_list.append(str(q_id))
         else:
             continue
-        
+
         q_user = mongo.db.users.find_one({"username":str(question['submitter'])})
-          
+
         tmp = {}
         tmp['id'] = str(question['_id'])
         tmp['title'] = question['title']
         tmp['submitter'] = q_user['username']
         tmp['submitter_user_points'] = q_user['points']
         tmp['tags'] = question['tags']
-        
+
         list.append(tmp)
 
     if not list:
@@ -422,7 +425,7 @@ def delete_question(question_id):
 @app.route('/questions/<ObjectId:question_id>', methods=["PUT"])
 @auth.login_required
 def edit_question(question_id):
-    
+
     print request.json
 
     question = mongo.db.questions.find_one(question_id)
@@ -652,7 +655,7 @@ def add_question():
     #Increment the asker's numQuestions by 1 and points by 2
     mongo.db.users.update(
                               { 'username' : auth.username() },
-                              { '$inc': {'number_of_questions' : 1, 
+                              { '$inc': {'number_of_questions' : 1,
                                          'points' : 2} }
                               )
 
