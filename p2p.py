@@ -379,20 +379,21 @@ def get_question(question_id):
 
     return dumps(question), 201
 
-@app.route('/questions/<ObjectId:question_id>', methods=["DELETE"])
+
+@app.route('/changemelater/<ObjectId:question_id>', methods=["DELETE"])
 @auth.login_required
-def delete_question(question_id):
+def delete_answer(question_id):
+    print request.json
     question = mongo.db.questions.find_one(question_id)
 
     if not question:
         return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)
 
     # If user wants to delete his answer, then remove the doc from the collection
-    if 'answer' in request.json:
-        ans_id = request.json['answer']['_id']
-        answer = mongo.db.answers.find_one({'_id': ObjectId(ans_id)})
-        if not answer:
-            return make_response(jsonify( { 'Error': 'Answer Not Found!' } ), 404)
+    ans_id = request.json['answer']['_id']
+    answer = mongo.db.answers.find_one({'_id': ObjectId(ans_id)})
+    if not answer:
+        return make_response(jsonify( { 'Error': 'Answer Not Found!' } ), 404)
 
         # Make sure that the answer is tied to the question_id in the URL before deleting it?
         if str(question_id) != str(answer['question_id']):
@@ -405,16 +406,23 @@ def delete_question(question_id):
             return "You are not allowed to delete this answer\n", 403
 
     # If user wants to delete his question, then remove the doc from the collection
-    elif 'question' in request.json:
+
+    return "OK\n", 200
+
+@app.route('/questions/<ObjectId:question_id>', methods=["DELETE"])
+@auth.login_required
+def delete_question(question_id):
+    question = mongo.db.questions.find_one(question_id)
+
+    if not question:
+        return make_response(jsonify( { 'Error': 'Question Not Found!' } ), 404)
 
         # Make sure the author of the question is the same who is deleting it
-        if auth.username() == question['submitter']:
-            mongo.db.questions.remove( {'_id': ObjectId(question_id)} )
-        else:
-            return "You are not allowed to delete this question\n", 403
-
+    if auth.username() == question['submitter']:
+        mongo.db.questions.remove( {'_id': ObjectId(question_id)} )
     else:
-        return "Bad Request: Neither question, nor answer field in delete request\n", 400
+        return "You are not allowed to delete this question\n", 403
+
 
     return "OK\n", 200
 
