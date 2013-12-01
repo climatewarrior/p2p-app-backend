@@ -355,7 +355,6 @@ def convert_timestamp_to_epoch(generation_time):
     return int(generationEpochTime) * 1000
 
 @app.route('/questions/<ObjectId:question_id>', methods=["GET"])
-@auth.login_required
 def get_question(question_id):
     question = mongo.db.questions.find_one(question_id)
 
