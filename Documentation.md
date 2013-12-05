@@ -67,7 +67,6 @@ Now, type the following commands:
 ```sh
 cd /etc/apache2/sites-available/
 sudo nano sitename.conf
-
 ```
 Note: sitename should be the DNS address of the EC2 instance(For example, ec2-54-xxx-xxx-xxx.us-west-2.compute.amazonaws.com). The content of this file should look like this:
 ```sh
@@ -84,15 +83,12 @@ Note: sitename should be the DNS address of the EC2 instance(For example, ec2-54
      </Directory>
 </VirtualHost>
 
-
 ```
 Then all that is left to do is disable the Apache default page and enable the Flask application:
 ```sh
 sudo a2dissite default
 sudo a2ensite sitename.conf
 sudo /etc/init.d/apache2 restart
-
-
 ```
 Now if you navigate to your page, you should see your Flask application up and running. 
 
@@ -108,20 +104,15 @@ You cannot install this package concurrently with the mongodb, mongodb-server, o
 The Ubuntu package management tool (i.e. dpkg and apt) ensure package consistency and authenticity by requiring that distributors sign packages with GPG keys. Issue the following command to import the MongoDB public GPG Key:
 ```sh
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-
-
 ```
 Create a /etc/apt/sources.list.d/mongodb.list file using the following command.
 ```sh
 sudo apt-get update
-
-
 ```
 
 Issue the following command to install the latest stable version of MongoDB:
 ```sh
 sudo apt-get install mongodb-10gen
-
 ```
 
 When this command completes, you have successfully installed MongoDB.
