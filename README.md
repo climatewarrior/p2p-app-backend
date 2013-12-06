@@ -8,12 +8,12 @@ Backend
 -----------
 Prerequisites
 -------------
-- You have an Amazon Web Services(AWS) account 
-- Python and Flask are installed on the system
+- You have an Amazon Web Services(AWS) account
+- Python is installed on the system
 - The source code is stored in a Git repository
 
 
-In order to run our application, you first need to set up a server. To ensure remote access, it might be a good choice to use some well-known cloud application platforms. For our application, we recommend using Amazon Elastic Cloud Computing (Amazon EC2). Here is the link that shows how to get started with Amazon EC2 Linux instances (Ubuntu): http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html
+In order to run our application, you first need to set up a server. To ensure remote access, it might be a good choice to use some well-known cloud application platforms. For our application, we recommend using Amazon Elastic Cloud Computing (Amazon EC2). Here is the link that shows how to get started with Amazon EC2 Linux instances (Ubuntu or any other up-to date Debian based distribution): http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html
 
 Once the Amazon EC2 instance is set up, the next step is to configure that instance. First, log in to the EC2 instance (usually done through an SSH connection) and type the following command:
 ```sh
@@ -29,10 +29,12 @@ Regarding the other dependencies, please refer to the following commands:
 ```sh
 pip install Flask-BasicAuth
 pip install Flask-PyMongo
-...
-
+pip install Flask-PyMongo
+pip install Flask-HTTPAuth
+pip install python-dateutil
+pip install Requests (For test suite)
 ```
-Here we do not enumerate all the dependency installation commands. For complete dependencies, please check the source code p2p.py on the Github. 
+Here we do not enumerate all the dependency installation commands. For complete dependencies, please check the source code p2p.py on the Github.
 
 Next, type the following command:
 
@@ -90,7 +92,7 @@ sudo a2dissite default
 sudo a2ensite sitename.conf
 sudo /etc/init.d/apache2 restart
 ```
-Now if you navigate to your page, you should see your Flask application up and running. 
+Now if you navigate to your page, you should see your Flask application up and running.
 
 
 Install MongoDB
@@ -116,6 +118,3 @@ sudo apt-get install mongodb-10gen
 ```
 
 When this command completes, you have successfully installed MongoDB.
-
-
-
